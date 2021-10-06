@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Enrollment Assistant</title>
+</head>
+<body>
+    <div id="base-container">
+
+        <header>
+            {% include "base_header.html" %}
+        </header>
+
+        <main>
+            <div id="content">
+                {{ content }}
+                {% block content %}{% endblock %}
+            </div>
+        </main>
+
+        <footer>
+            {% include "base_footer.html" %}
+        </footer>
+
+    </div>
+</body>
+</html>
