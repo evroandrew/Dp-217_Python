@@ -2,6 +2,8 @@
 
 {% block content %}
     <div id="profile-content">
-        Profile placeholder
+        {% if user.is_authenticated %}
+            {{ user.username }}
+        {% endif %}
     </div>
 {% endblock %}
