@@ -22,4 +22,5 @@ urlpatterns = [
     path('', views.index_view, name='index'),
     path('questioning/', views.questioning_view, name='questioning'),
     path('questioning_ajax/', views.questioning_ajax, name='questioning_ajax'),
+    path('questioning_results/', views.questioning_results, name='questioning_results'),
 ]

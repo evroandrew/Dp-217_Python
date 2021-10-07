@@ -1,5 +1,5 @@
 function ajaxRequest(values, answer_id) {
-    let csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
+    //let csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
     if (typeof values == "undefined") {
         values = {
             "questions":
@@ -31,28 +31,49 @@ function ajaxRequest(values, answer_id) {
                     "Займатися генної модифікацією", "Створювати додатки для смартфонів"],
             "result_id": [0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 2, 4, 1, 2, 4, 1, 3, 0, 3, 0, 1, 2, 3, 4, 0, 1, 2, 3, 4, 0, 2,
                 4, 1, 2, 4, 1, 3, 0, 3],
-            "result": []
+            "results": []
         };
     } else {
-        values['result'] = values['result'] + answer_id
+        values['results'].push(answer_id);
     }
     let SendInfo = {
-        question: values['questions'][0],
-        answer_id_1: values['answers'][0],
-        answer_id_2: values['answers'][1],
-        result_1: values['result_id'][0],
-        result_2: values['result_id'][1],
+        question: values['questions'].pop(),
+        answer_id_1: values['answers'].pop(),
+        answer_id_2: values['answers'].pop(),
+        result_1: values['result_id'].pop(),
+        result_2: values['result_id'].pop(),
         values: values
     };
-    $.ajax({
-        type: "POST",
-        url: '/questioning_ajax/',
-        data: JSON.stringify(SendInfo),
-        contentType: "application/json; charset=utf-8",
-        dataType: 'json',
-        success: function (res) {
-            //console.log(JSON.parse(res));
-            $('#main_container').html(res);
-        }
-    });
+    console.log(values['results']);
+    //$( "demo-container" ).html(res);
+    //console.log(JSON.parse(res));
+    if (values['results'].length < 2) {
+        $.ajax({
+            type: "POST",
+            url: '/questioning_ajax/',
+            data: JSON.stringify(SendInfo),
+            dataType: 'text',
+            success: function (res) {
+                console.log("Update Successful");
+                $("#main_container").html(res);
+            },
+            error: function (res, error) {
+                console.log(error);
+            }
+        });
+    } else {
+        $.ajax({
+            type: "POST",
+            url: '/questioning_results/',
+            data: JSON.stringify(values),
+            dataType: 'text',
+            success: function (res) {
+                console.log("Update Successful");
+                $("#main_container").html(res);
+            },
+            error: function (res, error) {
+                console.log(error);
+            }
+        });
+    }
 }

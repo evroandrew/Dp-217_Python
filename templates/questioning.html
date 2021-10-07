@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+<!DOCTYPE html>
 {% load static %}
 {% block content %}
     <script type="text/javascript" src="{% static 'js/questioning.js' %}"></script>
@@ -8,7 +9,6 @@
         </div>
         <div class="q__btn-bar">
             <button type="button" onClick="ajaxRequest()" class="c-button">Почати тест</button>
-            {% csrf_token %}
         </div>
         <div class="q__description" itemprop="description">
             <p>
@@ -71,9 +71,9 @@
                 </li>
             </ul>
             <p>
-                Щоб скоротити сферу пошуку майбутньої професії можна ще пройти <a
-                    href="/ questioning / professional-interests-aptitudes-and-abilities /"> тест на професійні
-                інтереси </a>.
+                Щоб скоротити сферу пошуку майбутньої професії можна ще пройти
+                <a href="/ questioning / professional-interests-aptitudes-and-abilities /">
+                    тест на професійні інтереси </a>.
             </p>
         </div>
     </div>

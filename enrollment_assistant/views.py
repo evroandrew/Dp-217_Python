@@ -1,5 +1,7 @@
 from django.shortcuts import render
 from django.views.decorators.csrf import csrf_exempt
+from django.http import HttpResponse
+from django.template import loader
 import json
 
 
@@ -14,6 +16,11 @@ def questioning_view(request):
 @csrf_exempt
 def questioning_ajax(request):
     tmp = json.loads(request.read())
-    return render(request, "questioning_ajax.html",
-                  {'question': tmp['question'], 'answer_id_1': tmp['answer_id_1'], 'answer_id_2': tmp['answer_id_2'],
-                   'values': tmp['values'], 'result_1': tmp['result_1'], 'result_2': tmp['result_2']})
+    t = loader.get_template('questioning_ajax.html')
+    return HttpResponse(t.render(tmp, request))
+
+@csrf_exempt
+def questioning_results(request):
+    tmp = json.loads(request.read())
+    t = loader.get_template('questioning_results.html')
+    return HttpResponse(t.render(tmp, request))
