@@ -47,7 +47,7 @@ function ajaxRequest(values, answer_id) {
     console.log(values['results']);
     //$( "demo-container" ).html(res);
     //console.log(JSON.parse(res));
-    if (values['results'].length < 2) {
+    if (values['results'].length < 20) {
         $.ajax({
             type: "POST",
             url: '/questioning_ajax/',
