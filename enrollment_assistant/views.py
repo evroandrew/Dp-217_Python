@@ -22,7 +22,7 @@ def questioning_ajax(request):
 
 @csrf_exempt
 def questioning_results(request):
-    categories_describtion = [
+    categories_description = [
         'Сфера діяльності даного типу спрямована на навколишнє нас природу. Це такі професії як ветеринар, еколог, '
         'агроном, геолог, мікробіолог. Професійно важливими якостями даних професій є: інтуїція, емпатія, '
         'вміння піклуватися про кого-небудь крім себе. Такі люди зазвичай трепетно ставляться до представників живої '
@@ -67,9 +67,9 @@ def questioning_results(request):
     for item in top_categories:
         expression_id.append(resulted_categories[item] // 3)
     print(expression_id)
-    resulted_text = {'first_description': categories_describtion[top_categories[0]],
-                     'second_description': categories_describtion[top_categories[1]],
-                     'third_description': categories_describtion[top_categories[2]],
+    resulted_text = {'first_description': categories_description[top_categories[0]],
+                     'second_description': categories_description[top_categories[1]],
+                     'third_description': categories_description[top_categories[2]],
                      'first_professions': f"{professions_options}{new_line}{professions[top_categories[0]]}",
                      'second_professions': f"{professions_options}{new_line}{professions[top_categories[1]]}",
                      'third_professions': f"{professions_options}{new_line}{professions[top_categories[2]]}",
