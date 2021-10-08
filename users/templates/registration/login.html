@@ -1,30 +1,41 @@
 {% extends 'base.html' %}
 
 {% block content %}
+
+    {% if form.errors %}
+        <p>Your username and password didn't match. Please try again.</p>
+    {% endif %}
+
     <div id="login-content">
-
-        <div id="login-wrapper" class="col-lg-4 mx-auto">
-
+        <div id="login-wrapper" class="col-md-4 mx-auto">
             <div class="card text-white bg-secondary mb-3">
                 <div class="card-header">
                     <h4>Login</h4>
                 </div>
                 <div class="card-body">
-                    <form >
+                    <form method="post" action="{% url 'login' %}">
+                        {% csrf_token %}
                         <div class="form-group">
                             <label for="login-username">
-                                Username
+                                {{ form.username.label_tag }}
                             </label>
                             <input type="text" class="form-control" id="login-username"
-                                   placeholder="Enter username" name="loginUsername"
+                                   placeholder="Enter username" name="{{ form.username.html_name }}"
+                                   {% if form.username.value %}
+                                       value="{{ form.username.value }}"
+                                   {% endif %}
                             />
                         </div>
                         <div class="form-group">
+                            {{ form.password.input }}
                             <label for="login-password">
-                                Password
+                                {{ form.password.label_tag }}
                             </label>
                             <input type="password" class="form-control" id="login-password"
-                                   placeholder="Enter password" name="loginPassword"
+                                   placeholder="Enter password" name="{{ form.password.html_name }}"
+                                   {% if form.username.value %}
+                                       value="{{ form.password.value }}"
+                                   {% endif %}
                             />
                         </div>
                         <button type="submit" class="btn btn-primary btn-block" id="login-submit">
@@ -33,8 +44,6 @@
                     </form>
                 </div>
             </div>
-
         </div>
-
     </div>
 {% endblock %}
