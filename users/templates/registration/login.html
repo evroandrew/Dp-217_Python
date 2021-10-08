@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+    <div id="login-content">
+
+        <div id="login-wrapper" class="col-lg-4 mx-auto">
+
+            <div class="card text-white bg-secondary mb-3">
+                <div class="card-header">
+                    <h4>Login</h4>
+                </div>
+                <div class="card-body">
+                    <form >
+                        <div class="form-group">
+                            <label for="login-username">
+                                Username
+                            </label>
+                            <input type="text" class="form-control" id="login-username"
+                                   placeholder="Enter username" name="loginUsername"
+                            />
+                        </div>
+                        <div class="form-group">
+                            <label for="login-password">
+                                Password
+                            </label>
+                            <input type="password" class="form-control" id="login-password"
+                                   placeholder="Enter password" name="loginPassword"
+                            />
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block" id="login-submit">
+                            Submit
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+{% endblock %}
