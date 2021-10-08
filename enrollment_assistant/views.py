@@ -54,7 +54,7 @@ def questioning_results(request):
     professions_options = "Ви можете почати освоювати одну з відповідних вам професій:"
     new_line = '\n'
     results = json.loads(request.read())['results']
-    categorised_results = identify_categories(results)
+    categorised_results = {i: results.count(i) for i in set(results)}
     top_categories = get_top_categories(categorised_results)
     categories = ["природа", "техніка", "людина", "знакова система", "художній образ"]
     expression = ["схильність не виражена", "середньо виражена схильність", "вкрай виражену схильність"]
@@ -82,16 +82,6 @@ def questioning_results(request):
                      }
     t = loader.get_template('questioning_results.html')
     return HttpResponse(t.render(resulted_text, request))
-
-
-def identify_categories(results):
-    resulted_categories = dict()
-    for result in results:
-        if result in resulted_categories:
-            resulted_categories[result] += 1
-        else:
-            resulted_categories[result] = 1
-    return resulted_categories
 
 
 def get_top_categories(resulted_categories):
