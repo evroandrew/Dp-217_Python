@@ -50,7 +50,7 @@ function ajaxRequest(values, answer_id) {
     if (values['results'].length < 20) {
         $.ajax({
             type: "POST",
-            url: '/questioning_ajax/',
+            url: '/questioning/questioning_ajax/',
             data: JSON.stringify(SendInfo),
             dataType: 'text',
             success: function (res) {
@@ -64,7 +64,7 @@ function ajaxRequest(values, answer_id) {
     } else {
         $.ajax({
             type: "POST",
-            url: '/questioning_results/',
+            url: '/questioning/results/',
             data: JSON.stringify(values),
             dataType: 'text',
             success: function (res) {

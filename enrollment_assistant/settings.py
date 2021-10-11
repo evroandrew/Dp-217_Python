@@ -10,8 +10,8 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import sys
-from pathlib import Path
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -32,6 +32,9 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'django_crontab',
+    'questioning',
+    'users',
+    'univer_search',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,3 +138,12 @@ Run this command to add all the defined CRONJOBS to crontab(*nix cron utility).
 Make sure to run this command every time CRONJOBS is changed in any way.
 python manage.py crontab add
 """
+
+# Custom user model
+AUTH_USER_MODEL = "users.CustomUser"
+
+# Redirect to home URL after login
+LOGIN_REDIRECT_URL = '/'
+
+# Redirect emails to console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
