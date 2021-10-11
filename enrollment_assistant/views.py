@@ -22,7 +22,7 @@ def questioning_ajax(request):
 
 @csrf_exempt
 def questioning_results(request):
-    categories_describtion = [
+    categories_description = [
         'Сфера діяльності даного типу спрямована на навколишнє нас природу. Це такі професії як ветеринар, еколог, '
         'агроном, геолог, мікробіолог. Професійно важливими якостями даних професій є: інтуїція, емпатія, '
         'вміння піклуватися про кого-небудь крім себе. Такі люди зазвичай трепетно ставляться до представників живої '
@@ -54,44 +54,34 @@ def questioning_results(request):
     professions_options = "Ви можете почати освоювати одну з відповідних вам професій:"
     new_line = '\n'
     results = json.loads(request.read())['results']
-    resulted_categories = identify_categories(results)
-    top_categories = get_top_categories(resulted_categories)
+    categorised_results = {i: results.count(i) for i in set(results)}
+    top_categories = get_top_categories(categorised_results)
     categories = ["природа", "техніка", "людина", "знакова система", "художній образ"]
     expression = ["схильність не виражена", "середньо виражена схильність", "вкрай виражену схильність"]
     expression_id = []
     print(results)
-    print(resulted_categories)
+    print(categorised_results)
     print(top_categories)
     for item in top_categories:
-        print(resulted_categories[item])
+        print(categorised_results[item])
     for item in top_categories:
-        expression_id.append(resulted_categories[item] // 3)
+        expression_id.append(categorised_results[item] // 3)
     print(expression_id)
-    resulted_text = {'first_description': categories_describtion[top_categories[0]],
-                     'second_description': categories_describtion[top_categories[1]],
-                     'third_description': categories_describtion[top_categories[2]],
+    resulted_text = {'first_description': categories_description[top_categories[0]],
+                     'second_description': categories_description[top_categories[1]],
+                     'third_description': categories_description[top_categories[2]],
                      'first_professions': f"{professions_options}{new_line}{professions[top_categories[0]]}",
                      'second_professions': f"{professions_options}{new_line}{professions[top_categories[1]]}",
                      'third_professions': f"{professions_options}{new_line}{professions[top_categories[2]]}",
                      'first_result':
-                         f"Професії типу «Людина - {categories[top_categories[0]]}» - {expression[expression_id[0]]} ({resulted_categories[top_categories[0]]} з 7 балів).",
+                         f"Професії типу «Людина - {categories[top_categories[0]]}» - {expression[expression_id[0]]} ({categorised_results[top_categories[0]]} з 7 балів).",
                      'second_result':
-                         f"Професії типу «Людина - {categories[top_categories[1]]}» - {expression[expression_id[1]]} ({resulted_categories[top_categories[1]]} з 7 балів).",
+                         f"Професії типу «Людина - {categories[top_categories[1]]}» - {expression[expression_id[1]]} ({categorised_results[top_categories[1]]} з 7 балів).",
                      'third_result':
-                         f"Професії типу «Людина - {categories[top_categories[2]]}» - {expression[expression_id[2]]} ({resulted_categories[top_categories[2]]} з 7 балів).",
+                         f"Професії типу «Людина - {categories[top_categories[2]]}» - {expression[expression_id[2]]} ({categorised_results[top_categories[2]]} з 7 балів).",
                      }
     t = loader.get_template('questioning_results.html')
     return HttpResponse(t.render(resulted_text, request))
-
-
-def identify_categories(results):
-    resulted_categories = dict()
-    for result in results:
-        if result in resulted_categories:
-            resulted_categories[result] += 1
-        else:
-            resulted_categories[result] = 1
-    return resulted_categories
 
 
 def get_top_categories(resulted_categories):
