@@ -16,16 +16,22 @@
                 <div class="nav-item me-auto">
                     <a class="nav-link" href="/relocation">Релокейт</a>
                 </div>
-                <div class="nav-item dropdown">
-                    <a class="nav-link  dropdown-toggle d-lg-none" href="#" data-bs-toggle="dropdown"> ПРОФІЛЬ </a>
-                    <a class="nav-link dropdown-toggle d-none d-lg-block" href="/profile"> ПРОФІЛЬ </a>
-                    <ul class="dropdown-menu">
-                        <li><a class="dropdown-item" href="/profile/#info"> Особисті дані </a></li>
-                        <li><a class="dropdown-item" href="/profile/#surveys"> Опитування </a></li>
-                        <li class="dropdown-divider"></li>
-                        <li><a class="dropdown-item" href="/profile/logout"> Вийти </a></li>
-                    </ul>
-                </div>
+                {% if user.is_authenticated %}
+                    <div class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle d-lg-none" href="#" data-bs-toggle="dropdown"> ПРОФІЛЬ </a>
+                        <a class="nav-link dropdown-toggle d-none d-lg-block" href="/profile"> ПРОФІЛЬ </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile/#info"> Особисті дані </a></li>
+                            <li><a class="dropdown-item" href="/profile/#surveys"> Опитування </a></li>
+                            <li class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/profile/logout"> Вийти </a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div>
+                        <a class="nav-link" href="/profile/login"> Увійти </a>
+                    </div>
+                {% endif %}
             </div>
         </div>
     </div>
