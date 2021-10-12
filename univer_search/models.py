@@ -1,13 +1,13 @@
 from django.db import models
 
 
+class StudyField(models.Model):
+    name = models.CharField(max_length=50)
+
+
 class Speciality(models.Model):
     name = models.CharField(max_length=50)
-
-
-class Subspeciality(models.Model):
-    name = models.CharField(max_length=50)
-    speciality = models.ForeignKey(Speciality, on_delete=models.CASCADE, related_name='subspecialities')
+    study_field = models.ForeignKey(StudyField, on_delete=models.CASCADE, related_name='specialities')
 
     def __str__(self):
         return f"{self.name}"
@@ -31,7 +31,7 @@ class City(models.Model):
 class University(models.Model):
     name = models.CharField(max_length=255)
     city = models.ForeignKey(City, on_delete=models.CASCADE, related_name='universities')
-    subspecialities = models.ManyToManyField(Subspeciality, related_name='universities')
+    specialities = models.ManyToManyField(Speciality, related_name='universities')
 
     def __str__(self):
         return f"{self.name}"
