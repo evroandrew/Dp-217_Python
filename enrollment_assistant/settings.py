@@ -75,9 +75,9 @@ WSGI_APPLICATION = 'enrollment_assistant.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ.get('DB_NAME'),
-        'USER': os.environ.get('DB_USER'),
-        'PASSWORD': os.environ.get('DB_PASS'),
+        'NAME': 'enrollment_assistant',
+        'USER': 'developer',
+        'PASSWORD': 'passdev',
         'HOST': os.environ.get('DB_HOST', "localhost"),
         'PORT': os.environ.get("DB_PORT", '5432'),
     }
