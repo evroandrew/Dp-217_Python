@@ -1,15 +1,22 @@
 {% extends 'base.html' %}
 
 {% block content %}
-
-    <div class="container py-5">
-        <h1>Register</h1>
-        <form method="POST">
-            {% csrf_token %}
-            {{ registration_form.as_p }}
-            <button class="btn btn-primary" type="submit">Register</button>
-        </form>
-        <p class="text-center">If you already have an account, <a href="/profile/login">login</a> instead.</p>
+<div id="registration-content">
+    <div id="registration-wrapper" class="col-md-4 mx-auto my-5">
+        <div class="card bg-secondary">
+            <div class="card-header">
+                    <h4>Реєстрація</h4>
+                </div>
+            <div class="card-body py-5">
+                <form method="POST">
+                    {% csrf_token %}
+                    {{ registration_form.as_p }}
+                    <button class="btn btn-primary" type="submit">Register</button>
+                </form>
+{#                <p class="text-center mb-0">Маєте аккаунт? </p>#}
+                <p class="text-center"><a href="{% url 'login' %}">Увійти</a></p>
+            </div>
+        </div>
     </div>
-
+</div>
 {% endblock %}
