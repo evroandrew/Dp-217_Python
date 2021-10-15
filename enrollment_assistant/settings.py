@@ -17,6 +17,7 @@ from pathlib import Path
 # BASE_DIR = Path(__file__).resolve().parent.parent
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.2/howto/deployment/checklist/
 
@@ -27,6 +28,7 @@ SECRET_KEY = 'django-insecure-3ocig*9(+84i-05^=s9aate*&1*8m@1p476!!&cs)jdb=&o89e
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
 
 # Application definition
 
@@ -73,16 +75,23 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'enrollment_assistant.wsgi.application'
 
+
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
+# If you have any questions with db connecting - you should use path variables
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': BASE_DIR / 'db.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASS'),
+        'HOST': os.environ.get('DB_HOST', "localhost"),
+        'PORT': os.environ.get("DB_PORT", '5432'),
     }
 }
+
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators
@@ -102,6 +111,7 @@ AUTH_PASSWORD_VALIDATORS = [
     },
 ]
 
+
 # Internationalization
 # https://docs.djangoproject.com/en/3.2/topics/i18n/
 
@@ -115,6 +125,7 @@ USE_L10N = True
 
 USE_TZ = True
 
+
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.2/howto/static-files/
 
@@ -123,6 +134,8 @@ STATICFILES_DIRS = (
 )
 
 STATIC_URL = '/static/'
+
+
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
@@ -139,11 +152,16 @@ Make sure to run this command every time CRONJOBS is changed in any way.
 python manage.py crontab add
 """
 
-# Custom user model
+
+# Custom authentication user model
 AUTH_USER_MODEL = "users.CustomUser"
+
+# Custom authentication backend
+AUTHENTICATION_BACKENDS = ['users.backends.EmailUsernameBackend']
 
 # Redirect to home URL after login
 LOGIN_REDIRECT_URL = '/'
+
 
 # Redirect emails to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
