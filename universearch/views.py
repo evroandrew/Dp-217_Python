@@ -28,3 +28,7 @@ def get_json_specs_data(request, *args, **kwargs):
 def uni_search(request):
     return render(request, 'universearch/search_form.html')
 
+
+def get_universities(request):
+    return render(request, 'universearch/results.html')
+
