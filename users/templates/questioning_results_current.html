@@ -1,5 +1,7 @@
+{% extends 'base.html' %}
 <!DOCTYPE html>
-<div id="main_container">
+{% load static %}
+{% block content %}
     <div id="index-content">
         <h1 class="q__h2">{{ title }}</h1>
         <div class="q__h3">
@@ -14,4 +16,4 @@
             <p>{{ third_professions }}</p>
         </div>
     </div>
-</div>
+{% endblock %}

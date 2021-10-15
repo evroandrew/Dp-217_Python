@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+<!DOCTYPE html>
+{% load static %}
+{% block content %}
+    <script type="text/javascript" src="{% static 'js/questioning.js' %}"></script>
+    <h1 class="q__h2">{{ title }}</h1>
+    <table>
+        <tr>
+            <td>{{ results }}</td>
+        </tr>
+    </table>
+{% endblock %}
