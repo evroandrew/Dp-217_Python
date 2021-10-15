@@ -74,12 +74,14 @@ WSGI_APPLICATION = 'enrollment_assistant.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
 
+
+# If you have any questions with db connecting - you should use path variables
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'enrollment_assistant',
-        'USER': 'developer',
-        'PASSWORD': 'passdev',
+        'NAME': os.environ.get('DB_NAME', "localhost"),
+        'USER': os.environ.get('DB_USER', "localhost"),
+        'PASSWORD': os.environ.get('DB_PASS', "localhost"),
         'HOST': os.environ.get('DB_HOST', "localhost"),
         'PORT': os.environ.get("DB_PORT", '5432'),
     }
