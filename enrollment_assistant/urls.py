@@ -25,5 +25,5 @@ urlpatterns = [
     path('questioning_ajax/', views.questioning_ajax, name='questioning_ajax'),
     path('questioning_results/', views.questioning_results, name='questioning_results'),
     path('profile/', include('users.urls')),
-    path('search/', include('univer_search.urls'))
+    path('search/', include('universearch.urls')),
 ]

@@ -34,7 +34,7 @@ ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
     'users',
-    'univer_search',
+    'universearch',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',

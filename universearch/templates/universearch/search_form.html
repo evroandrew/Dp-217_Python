@@ -1,0 +1,41 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ui container mt-5">
+<form class="mt-5" id="search-form" action="/search/universities/" method="get">
+    <h1>Пошук по регiонах</h1>
+    <div class="ui fluid selection dropdown mt-3" id="regions">
+        <input type="hidden" name="region">
+        <i class="dropdown icon"></i>
+        <div class="default text">Регiони</div>
+        <div class="menu" id="region-box">
+        </div>
+    </div>
+    <div class="ui fluid selection dropdown mt-3" id="cities">
+        <input type="hidden" name="city">
+        <i class="dropdown icon"></i>
+        <div class="default text" id="city-text">Мiста</div>
+        <div class="menu" id="cities-box">
+        </div>
+    </div>
+    <h1>Пошук за галузями знань</h1>
+    <div class="ui fluid selection dropdown mt-3" id="fields">
+        <input type="hidden" name="field">
+        <i class="dropdown icon"></i>
+        <div class="default text">Галузi знань</div>
+        <div class="menu" id="field-box">
+        </div>
+    </div>
+    <div class="ui fluid selection dropdown mt-3" id="specialities">
+        <input type="hidden" name="speciality">
+        <i class="dropdown icon"></i>
+        <div class="default text" id="speciality-text">Спецiальностi</div>
+        <div class="menu" id="specialities-box">
+        </div>
+    </div>
+    <div id="btn-box" class="mt-5">
+        <button type="submit" class="ui primary button">Пошук</button>
+    </div>
+</form>
+</div>
+{% endblock %}
