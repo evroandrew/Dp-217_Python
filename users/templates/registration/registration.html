@@ -70,6 +70,15 @@
                         </div>
                     </div>
 
+                    {% if form.errors %}
+                        <div class="text-danger my-3">
+                            {% for value in form.errors.values %}
+                                <div>{{ value }}</div>
+                            {% endfor %}
+                        </div>
+
+                    {% endif %}
+
                     <div class="d-grid gap-2 my-3">
                         <button type="submit" id="registration-submit" class="btn btn-primary" >
                             Зареєструвати

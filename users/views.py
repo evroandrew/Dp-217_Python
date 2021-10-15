@@ -18,5 +18,6 @@ def registration_view(request):
             messages.success(request, "Registration successful.")
             return redirect("/")
         messages.error(request, "Unsuccessful registration. Invalid information.")
-    form = CustomUserCreationForm()
+    else:
+        form = CustomUserCreationForm()
     return render(request=request, template_name="registration/registration.html", context={"form": form})
