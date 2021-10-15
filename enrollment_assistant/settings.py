@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'users',
+    'univer_search',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -123,7 +125,19 @@ STATICFILES_DIRS = (
 
 STATIC_URL = '/static/'
 
+
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# Custom user model
+AUTH_USER_MODEL = "users.CustomUser"
+
+
+# Redirect to home URL after login
+LOGIN_REDIRECT_URL = '/'
+
+
+# Redirect emails to console
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
