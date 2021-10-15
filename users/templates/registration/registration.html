@@ -2,19 +2,84 @@
 
 {% block content %}
 <div id="registration-content">
-    <div id="registration-wrapper" class="col-md-4 mx-auto my-5">
-        <div class="card bg-secondary">
+    <div id="registration-wrapper" class="col-sm-6 col-md-5 col-lg-4 col-xl-3 mx-auto my-5">
+        <div class="card text-white bg-primary mb-3">
             <div class="card-header">
                     <h4>Реєстрація</h4>
                 </div>
-            <div class="card-body py-5">
+            <div class="card-body">
                 <form method="POST">
                     {% csrf_token %}
-                    {{ registration_form.as_p }}
-                    <button class="btn btn-primary" type="submit">Register</button>
+                    <div class="form-group mb-2">
+                        <label for="registration-username">
+                            Ім'я користувача
+                        </label>
+                        <input type="text" class="form-control" id="registration-username"
+                               placeholder="" name="{{ form.username.html_name }}"
+                               {% if form.username.value %}
+                                   value="{{ form.username.value }}"
+                               {% endif %}
+                        />
+                        <div class="small">
+                            {{ form.username.help_text }}
+                        </div>
+                    </div>
+
+                    <div class="form-group  mb-2">
+                        <label for="registration-email">
+                            Пошта
+                        </label>
+                        <input type="text" class="form-control" id="registration-email"
+                               placeholder="" name="{{ form.email.html_name }}"
+                               {% if form.email.value %}
+                                   value="{{ form.email.value }}"
+                               {% endif %}
+                        />
+                        <div class="small">
+                            {{ form.email.help_text }}
+                        </div>
+                    </div>
+
+                    <div class="form-group  mb-2">
+                        <label for="registration-password1">
+                            Пароль
+                        </label>
+                        <input type="password" class="form-control" id="registration-password1"
+                               placeholder="" name="{{ form.password1.html_name }}"
+                               {% if form.password1.value %}
+                                   value="{{ form.password1.value }}"
+                               {% endif %}
+                        />
+                        <div class="small">
+                            {{ form.password1.help_text }}
+                        </div>
+                    </div>
+
+                    <div class="form-group  mb-2">
+                        <label for="registration-password2">
+                            Пароль ще раз
+                        </label>
+                        <input type="password" class="form-control" id="registration-password2"
+                               placeholder="" name="{{ form.password2.html_name }}"
+                               {% if form.password2.value %}
+                                   value="{{ form.password2.value }}"
+                               {% endif %}
+                        />
+                        <div class="small">
+                            {{ form.password2.help_text }}
+                        </div>
+                    </div>
+
+                    <div class="d-grid gap-2 my-3">
+                        <button type="submit" id="registration-submit" class="btn btn-primary" >
+                            Зареєструвати
+                        </button>
+                    </div>
+
                 </form>
-{#                <p class="text-center mb-0">Маєте аккаунт? </p>#}
-                <p class="text-center"><a href="{% url 'login' %}">Увійти</a></p>
+                <div class="text-center small mt-2">
+                    <a class="text-white" href="{% url 'login' %}">Увійти</a>
+                </div>
             </div>
         </div>
     </div>
