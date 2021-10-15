@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block content %}
+
+    <div id="profile-content">
+        <h5>Profile</h5>
+    </div>
+
+    <ul class="nav nav-tabs">
+        <li class="nav-item">
+            <a class="nav-link active" data-bs-toggle="tab" href="#info">Personal info</a>
+        </li>
+        <li class="nav-item">
+            <a class="nav-link" data-bs-toggle="tab" href="#surveys">Surveys</a>
+        </li>
+    </ul>
+
+    <div id="myTabContent" class="tab-content">
+        <div class="tab-pane fade show active" id="info">
+                <ul>
+                    <li>Username: {{ user.username }}</li>
+                    <li>Gender: {{ user.gender }}</li>
+                    <li>City: {{ user.city }}</li>
+                </ul>
+        </div>
+        <div class="tab-pane fade" id="surveys">
+            <p>Surveys results</p>
+        </div>
+    </div>
+
+{% endblock %}

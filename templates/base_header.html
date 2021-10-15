@@ -1,25 +1,38 @@
 <nav class="navbar navbar-expand-lg navbar-dark bg-primary">
-  <div class="container-fluid">
-    <a class="navbar-brand" href="">Enrollment Assistant</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-
-    <div class="collapse navbar-collapse" id="navbarColor01">
-      <ul class="navbar-nav me-auto">
-        <li class="nav-item">
-          <a class="nav-link" href="/survey">Survey</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/search">Search</a>
-        </li>
-        <li class="nav-item">
-          <a class="nav-link" href="/relocation">Relocation</a>
-        </li>
-      </ul>
-      <form class="d-flex">
-          <a class="nav-link" href="/profile">Profile</a>
-      </form>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="/">Enrollment Assistant</a>
+        <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarColor01"
+                aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarColor01">
+            <div class="navbar-nav d-flex" style="width: 100%">
+                <div class="nav-item">
+                    <a class="nav-link" href="/questioning">Опитування</a>
+                </div>
+                <div class="nav-item">
+                    <a class="nav-link" href="/search">Пошук</a>
+                </div>
+                <div class="nav-item me-auto">
+                    <a class="nav-link" href="/relocation">Релокейт</a>
+                </div>
+                {% if user.is_authenticated %}
+                    <div class="nav-item dropdown">
+                        <a class="nav-link  dropdown-toggle d-lg-none" href="#" data-bs-toggle="dropdown"> ПРОФІЛЬ </a>
+                        <a class="nav-link dropdown-toggle d-none d-lg-block" href="/profile"> ПРОФІЛЬ </a>
+                        <ul class="dropdown-menu">
+                            <li><a class="dropdown-item" href="/profile/#info"> Особисті дані </a></li>
+                            <li><a class="dropdown-item" href="/profile/#surveys"> Опитування </a></li>
+                            <li class="dropdown-divider"></li>
+                            <li><a class="dropdown-item" href="/profile/logout"> Вийти </a></li>
+                        </ul>
+                    </div>
+                {% else %}
+                    <div>
+                        <a class="nav-link" href="/profile/login"> Увійти </a>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-  </div>
 </nav>
