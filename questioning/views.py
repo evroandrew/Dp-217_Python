@@ -19,17 +19,16 @@ def questioning_ajax(request):
 
 
 @csrf_exempt
-def questioning_results(request):
+def questioning_results(request, link=''):
     if request.is_ajax():
         results = json.loads(request.read())['results']
         save_questions_results(request, results)
         resulted_text = create_answer(results)
         return render(request, 'questioning_results.html', resulted_text)
-    path = request.path[21:]
-    if path == '':
+    if link == '':
         title = get_all_answers(request)
     else:
-        query = TestResult.objects.filter(url=path)
+        query = TestResult.objects.filter(url=link)
         if query:
             results = query.first().results
             results = [int(i) for i in results[1:-1].replace(' ', '').split(',')]

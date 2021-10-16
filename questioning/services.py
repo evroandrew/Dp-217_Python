@@ -1,11 +1,13 @@
 from django.db.models import Prefetch
 from questioning.models import TestResult, UserTestResult
+from users.models import CustomUser
 
 
 def save_questions_results(request, results):
     if request.user.is_authenticated:
         test_result = TestResult.objects.create(results=results)
-        UserTestResult.objects.create(user_id=request.user.id, result_id=test_result)
+        user_id = CustomUser.objects.get(id=request.user.id, )
+        UserTestResult.objects.create(user_id=user_id, result_id=test_result)
         return test_result.url
     return 0
 
