@@ -84,6 +84,21 @@ def create_answer(results):
     return resulted_text
 
 
+def get_all_answers(request):
+    results = get_user_results(request)
+    if results == "NotAuthorised":
+        title = {'title': "Ви не авторизовані", }
+    elif len(results) == 0:
+        title = {'title': 'Ви не пройшли опитування', }
+    else:
+        items = []
+        for item in results:
+            items.append(str(item))
+        items.reverse()
+        title = {'title': 'Ваші результати', 'results': items, }
+    return title
+
+
 @csrf_exempt
 def questioning_results(request):
     if request.is_ajax():
@@ -93,28 +108,23 @@ def questioning_results(request):
         return render(request, 'questioning_results.html', resulted_text)
     path = request.path[21:]
     if path == '':
-        results = get_user_results(request)
-        if results == "NotAuthorised":
-            title = {'title': "Ви не авторизовані", }
-        elif len(results) == 0:
-            title = {'title': 'Ви не пройшли опитування', }
-        else:
-            items = []
-            for item in results:
-                items.append(str(item))
-            title = {'title': 'Ваші результати', 'results': items, }
-        return render(request, 'questioning_results_full.html', title)
+        title = get_all_answers(request)
     else:
-        results = TestResult.objects.filter(url=path).first().results
-        results = [int(i) for i in results[1:-1].replace(' ', '').split(',')]
-        resulted_text = create_answer(results)
-        return render(request, 'questioning_results_current.html', resulted_text)
+        query = TestResult.objects.filter(url=path)
+        if query:
+            results = query.first().results
+            results = [int(i) for i in results[1:-1].replace(' ', '').split(',')]
+            resulted_text = create_answer(results)
+            return render(request, 'questioning_results_current.html', resulted_text)
+        else:
+            title = {'title': 'Результат опитування не знайдено', }
+    return render(request, 'questioning_results_full.html', title)
 
 
 def get_user_results(request):
     if request.user.is_authenticated:
         return UserTestResult.objects.filter(user_id=request.user.id).prefetch_related(
-            Prefetch('result_id', queryset=TestResult.objects.all())).reverse()
+            Prefetch('result_id', queryset=TestResult.objects.all()))
     else:
         return "NotAuthorised"
 
