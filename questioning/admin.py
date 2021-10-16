@@ -1,3 +1,5 @@
 from django.contrib import admin
+from .models import TestResult, UserTestResult
 
-# Register your models here.
+admin.site.register(TestResult)
+admin.site.register(UserTestResult)
