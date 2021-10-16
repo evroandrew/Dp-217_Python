@@ -135,7 +135,7 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if sys.platform != 'win32':
     CRONJOBS = [
-        ('10 8 * * *', 'questioning.cron.obsolete_records_removal')
+        ('10 8 * * *', 'questioning.cron.remove_obsolete_records')
     ]
 """
 Run this command to add all the defined CRONJOBS to crontab(*nix cron utility). 
