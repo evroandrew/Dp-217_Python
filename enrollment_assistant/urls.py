@@ -22,5 +22,5 @@ urlpatterns = [
     path('', views.index_view, name='index'),
     path('questioning/', include('questioning.urls')),
     path('profile/', include('users.urls')),
-    path('search/', include('univer_search.urls'))
+    path('search/', include('universearch.urls')),
 ]

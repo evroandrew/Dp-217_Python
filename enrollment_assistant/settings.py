@@ -34,7 +34,7 @@ INSTALLED_APPS = [
     'django_crontab',
     'questioning',
     'users',
-    'univer_search',
+    'universearch',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
