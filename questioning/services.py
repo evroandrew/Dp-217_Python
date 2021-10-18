@@ -78,7 +78,7 @@ def create_answer(results):
     return resulted_text
 
 
-def representation_result(results, dates, urls):
+def gen_result(results, dates, urls):
     items = []
     professions = [
         "Ландшафтний дизайнер, фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог харчової промисловості",
@@ -117,7 +117,7 @@ def get_all_answers(request):
         all_objects = TestResult.objects.all()
         dates = [record.created_date for record in all_objects if record.url in urls]
         items = [record.results for record in all_objects if record.url in urls]
-        items = reversed(representation_result(items, dates, urls))
+        items = reversed(gen_result(items, dates, urls))
         context = [{'date': 'Дата', 'categories': 'Категорії результату', 'professions': 'Рекомендовані професії', }]
         for item in items:
             context.append({'date': item[0], 'categories': item[1:4], 'professions': item[4:-1],
