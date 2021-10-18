@@ -14,7 +14,7 @@ def questioning_view(request):
 @csrf_exempt
 def remove_result(request, url):
     remove_user_result(request, url)
-    return JsonResponse({})
+    return JsonResponse({'status': '500'})
 
 
 @csrf_exempt

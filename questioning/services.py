@@ -9,8 +9,6 @@ def save_questions_results(request, results):
         test_result = TestResult.objects.create(results=results)
         user_id = CustomUser.objects.get(id=request.user.id, )
         UserTestResult.objects.create(user_id=user_id, result_id=test_result)
-        return test_result.url
-    return 0
 
 
 def remove_user_result(request, url):
