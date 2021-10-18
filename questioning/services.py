@@ -16,6 +16,8 @@ def remove_user_result(request, url):
         result_id = TestResult.objects.get(url=url)
         if UserTestResult.objects.filter(result_id=result_id):
             TestResult.objects.get(url=url).delete()
+            return True
+    return False
 
 
 def create_answer(results):
