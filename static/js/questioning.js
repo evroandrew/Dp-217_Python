@@ -54,7 +54,6 @@ function ajaxRequest(values, answer_id) {
             data: JSON.stringify(SendInfo),
             dataType: 'text',
             success: function (res) {
-                console.log("Update Successful");
                 $("#main_container").html(res);
             },
             error: function (res, error) {
@@ -68,7 +67,6 @@ function ajaxRequest(values, answer_id) {
             data: JSON.stringify(values),
             dataType: 'text',
             success: function (res) {
-                console.log("Update Successful");
                 $("#main_container").html(res);
             },
             error: function (res, error) {

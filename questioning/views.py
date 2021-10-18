@@ -1,14 +1,21 @@
 import json
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from questioning.models import TestResult
-from .services import save_questions_results, create_answer, get_all_answers
+from .services import save_questions_results, create_answer, get_all_answers, remove_user_result
 
 
 def questioning_view(request):
     return render(request, "questioning.html")
+
+
+@csrf_exempt
+def remove_result(request, url):
+    if remove_user_result(request, url):
+        return JsonResponse({})
+    return JsonResponse({'status': '500'})
 
 
 @csrf_exempt
