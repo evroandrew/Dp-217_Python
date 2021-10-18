@@ -2,11 +2,11 @@
 <!DOCTYPE html>
 {% load static %}
 {% block content %}
-    <script type="text/javascript" src="{% static 'js/questioning.js' %}"></script>
-    <h1 class="q__h2">{{ title }}</h1>
-    <table>
-        <tr>
-            <td>{{ results }}</td>
-        </tr>
-    </table>
+<script type="text/javascript" src="{% static 'js/questioning.js' %}"></script>
+<h1 class="q__h2">{{ title }}</h1>
+<div style="display: none" id="jsonData" data-json="{{ data }}"></div>
+<table id="table" class=" table table-hover">
+    <!-- here goes our data! -->
+</table>
+<script src="{% static 'js/build-view-table.js' %}"></script>
 {% endblock %}

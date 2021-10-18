@@ -5,12 +5,14 @@
     font-size: 36px;
     line-height: 1.2;
 }
+
 .q__h2 {
     color: #000;
     font-weight: 400;
     font-size: 36px;
     line-height: 1.2;
 }
+
 .q__h3 {
     text-align: center;
     color: #000;
@@ -18,6 +20,7 @@
     font-size: 24px;
     line-height: 1.2;
 }
+
 .q__description {
     padding: 70px;
     font-size: 18px;
@@ -52,4 +55,8 @@
     margin: 0em;
     font: 400 11px system-ui;
     font-size: 1.4vw;
+}
+
+q__p {
+    display: none
 }
