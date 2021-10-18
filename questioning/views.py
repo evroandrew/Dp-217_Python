@@ -4,11 +4,17 @@ from django.http import HttpResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from questioning.models import TestResult
-from .services import save_questions_results, create_answer, get_all_answers
+from .services import save_questions_results, create_answer, get_all_answers, remove_user_result
 
 
 def questioning_view(request):
     return render(request, "questioning.html")
+
+
+@csrf_exempt
+def remove_result(request, url):
+    remove_user_result(request, url)
+    return render(request, "remove_result.html")
 
 
 @csrf_exempt

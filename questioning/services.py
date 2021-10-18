@@ -1,3 +1,4 @@
+import json
 from django.db.models import Prefetch
 from questioning.models import TestResult, UserTestResult
 from users.models import CustomUser
@@ -10,6 +11,13 @@ def save_questions_results(request, results):
         UserTestResult.objects.create(user_id=user_id, result_id=test_result)
         return test_result.url
     return 0
+
+
+def remove_user_result(request, url):
+    if request.user.is_authenticated:
+        result_id = TestResult.objects.get(url=url)
+        if UserTestResult.objects.filter(result_id=result_id):
+            TestResult.objects.get(url=url).delete()
 
 
 def create_answer(results):
@@ -70,18 +78,51 @@ def create_answer(results):
     return resulted_text
 
 
+def representation_result(results, dates, urls):
+    items = []
+    professions = [
+        "Ландшафтний дизайнер, фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог харчової промисловості",
+        "Автомеханік, Інженер, Електрик, Пілот",
+        "Психологія, SMM-менеджер, Інтернет-маркетолог, Project-менеджер, Маркетинг, Управління.",
+        "Data Science, програміст Python, розробка мобільних додатків, інтернет-маркетолог.",
+        "Дизайнер, Кліпмейкер, Кіноактор, ТВ - Байєр"]
+    categories = ["природа", "техніка", "людина", "знакова система", "художній образ"]
+    for index in range(len(urls)):
+        result, date, url = results[index], dates[index], urls[index]
+        result = [int(i) for i in result[1:-1].replace(' ', '').split(',')]
+        categorised_results = {i: result.count(i) for i in set(result)}
+        top_categories = get_top_categories(categorised_results)
+        items.append([date.strftime("%m/%d/%Y"),
+                      categories[top_categories[0]],
+                      categories[top_categories[1]],
+                      categories[top_categories[2]],
+                      professions[top_categories[0]],
+                      professions[top_categories[1]],
+                      professions[top_categories[2]],
+                      url])
+    return items
+
+
 def get_all_answers(request):
     results = get_user_results(request)
     if results == "NotAuthorised":
-        title = {'title': "Ви не авторизовані", }
+        return {'title': "Ви не авторизовані", }
     elif len(results) == 0:
-        title = {'title': 'Ви не пройшли опитування', }
+        return {'title': 'Ви не пройшли опитування', }
     else:
-        items = []
+        urls = []
         for item in results:
-            items.append(str(item))
-        items.reverse()
-        title = {'title': 'Ваші результати', 'results': items, }
+            urls.append(str(item))
+        urls.reverse()
+        all_objects = TestResult.objects.all()
+        dates = [record.created_date for record in all_objects if record.url in urls]
+        items = [record.results for record in all_objects if record.url in urls]
+        items = reversed(representation_result(items, dates, urls))
+        context = [{'date': 'Дата', 'categories': 'Категорії результату', 'professions': 'Рекомендовані професії', }]
+        for item in items:
+            context.append({'date': item[0], 'categories': item[1:4], 'professions': item[4:-1],
+                            'url': item[-1], })
+    title = {'title': 'Ваші результати', 'data': json.dumps(context)}
     return title
 
 
