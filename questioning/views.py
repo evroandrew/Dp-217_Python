@@ -1,6 +1,6 @@
 import json
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
 from questioning.models import TestResult
@@ -14,7 +14,7 @@ def questioning_view(request):
 @csrf_exempt
 def remove_result(request, url):
     remove_user_result(request, url)
-    return render(request, "remove_result.html")
+    return JsonResponse({})
 
 
 @csrf_exempt
