@@ -5,26 +5,36 @@
     <meta charset="UTF-8">
     <title>Enrollment Assistant</title>
     <link rel="stylesheet" href="{% static 'css/bootstrap.min.css' %}">
-    <link rel="stylesheet" href="{% static 'js/bootstrap.min.js' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
+    <link rel="stylesheet" href="{% static 'css/questioning.css' %}">
+    <link rel="stylesheet" type='text/css' href="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.2.14/semantic.min.css">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/semantic-ui/2.4.1/semantic.min.js"></script>
+    <script src="{% static 'js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'js/questioning.js' %}"></script>
+    <script src="{% static 'js/profile.js' %}"></script>
+    <script src="{% static 'js/univers_search_form.js' %}" defer></script>
+    <script src="{% static 'js/semantic.js' %}" defer></script>
 </head>
 <body>
-    <div id="base-container">
+<div id="base-container">
 
-        <header>
-            {% include "base_header.html" %}
-        </header>
+    <header>
+        {% include "base_header.html" %}
+    </header>
 
-        <main>
-            <div id="content">
-                {{ content }}
-                {% block content %}{% endblock %}
-            </div>
-        </main>
+    <main>
+        <div id="content">
+            {{ content }}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
 
-        <footer>
-            {% include "base_footer.html" %}
-        </footer>
+    <footer>
+        {% include "base_footer.html" %}
+    </footer>
 
-    </div>
+</div>
+
 </body>
 </html>

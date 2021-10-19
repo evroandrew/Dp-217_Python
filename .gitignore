@@ -5,3 +5,6 @@ __pycache__
 .vscode 
 .history 
 *.sqlite3
+**/migrations/**
+!**/migrations
+!**/migrations/__init__.py

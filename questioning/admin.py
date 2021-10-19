@@ -1,10 +1,5 @@
 from django.contrib import admin
-from .models import QuestionsBase, KlimovCategory
+from .models import TestResult, UserTestResult
 
-
-# class QuestioningAdmin(admin.ModelAdmin):
-#     model = TestProfQualification
-
-
-admin.site.register(QuestionsBase)
-admin.site.register(KlimovCategory)
+admin.site.register(TestResult)
+admin.site.register(UserTestResult)

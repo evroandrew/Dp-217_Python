@@ -20,5 +20,7 @@ from . import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', views.index_view, name='index'),
-    #path('test/', include('questioning.urls.py'))
+    path('questioning/', include('questioning.urls')),
+    path('profile/', include('users.urls')),
+    path('search/', include('universearch.urls')),
 ]
