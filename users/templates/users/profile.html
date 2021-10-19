@@ -4,15 +4,11 @@
 
 <div id="profile-content">
 
-{#    <div id="profile-wrapper" class="col-sm-6 col-md-5 col-lg-4 col-xl-3 my-2 mx-auto">#}
     <div id="profile-wrapper" class="col-md-10 col-lg-8 col-xl-6 my-2 mx-auto">
-{#    <div id="profile-wrapper" class="col-md-10 my-2 mx-auto">#}
-
 
         <div id="profile-header">
             <h5>Профіль</h5>
         </div>
-
 
         <ul class="nav nav-tabs">
             <li class="nav-item">
@@ -47,32 +43,33 @@
                 </div>
                 {% for result in results %}
 
-                    <div class="my-4 pb-3 bg-light border rounded">
-{#                        <div class="m-2 border d-flex justify-content-between">#}
-                        <div class="d-flex justify-content-between my-2 mx-2">
-                            <div class="small px-2 border rounded">
-                                15/11/2021
+                    <div class="my-4 pb-2 bg-light border rounded result-block"
+                        data-resultid="{{ result.id }}">
+                        <div class="d-flex justify-content-between my-1 mx-2">
+
+                            <div class="small p-1 ">
+                                {{ result.date|date:"d.m.Y" }}
                             </div>
-
-
-                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#000"/>
-                                <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#000"/>
-                            </svg>
-
+                            <div>
+                                <button type="button" class="result-delete-button btn btn-outline-light p-0"
+                                        data-resultid="{{ result.id }}">
+                                        <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16"
+                                             fill="currentColor" class="bi bi-x-lg" viewBox="0 0 16 16">
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M13.854 2.146a.5.5 0 0 1 0 .708l-11 11a.5.5 0 0 1-.708-.708l11-11a.5.5 0 0 1 .708 0Z" fill="#000"/>
+                                            <path fill-rule="evenodd" clip-rule="evenodd" d="M2.146 2.146a.5.5 0 0 0 0 .708l11 11a.5.5 0 0 0 .708-.708l-11-11a.5.5 0 0 0-.708 0Z" fill="#000"/>
+                                        </svg>
+                                </button>
+                            </div>
                         </div>
 
-                        {% for profession in result %}
+                        <div class="border-bottom"></div>
 
-                            {% widthratio profession.points 8 100 as percent %}
+                        {% for category in result.categories %}
 
-                            {#                            <div class="m-2 border row">#}
+                            {% widthratio category.points 8 100 as percent %}
+
                             <div class="row">
-{#                                {{ percent }}#}
-{#                                <div class="m-2 border col-3">#}
-                                <div class="col-3">
-
-{#                                    <div class="progress my-2 border">#}
+                                <div class="col-4">
                                     <div class="progress mx-4 mt-3">
                                         <div class="progress-bar progress-bar-striped bg-success" role="progressbar"
                                                  style="width: {{ percent }}%;"
@@ -80,80 +77,31 @@
                                                  aria-valuemin="0" aria-valuemax="100">
                                                 {{ percent }}%
                                         </div>
-{##}
-{##}
-{#                                        {% if percent >= 7 %}#}
-{#                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"#}
-{#                                                 style="width: {{ percent }}%;"#}
-{#                                                 aria-valuenow="{{ percent }}"#}
-{#                                                 aria-valuemin="0" aria-valuemax="100">#}
-{#                                                {{ percent }}%#}
-{#                                            </div>#}
-{#                                        {% elif percent >= 40 %}#}
-{#                                            <div class="progress-bar progress-bar-striped bg-info" role="progressbar"#}
-{#                                                 style="width: {{ percent }}%;"#}
-{#                                                 aria-valuenow="{{ percent }}"#}
-{#                                                 aria-valuemin="0" aria-valuemax="100">#}
-{#                                                {{ percent }}%#}
-{#                                            </div>#}
-{#                                        {% else %}#}
-{#                                            <div class="progress-bar progress-bar-striped bg-success" role="progressbar"#}
-{#                                                 style="width: {{ percent }}%;"#}
-{#                                                 aria-valuenow="{{ percent }}"#}
-{#                                                 aria-valuemin="0" aria-valuemax="100">#}
-{#                                                {{ percent }}%#}
-{#                                            </div>#}
-{#                                        {% endif %}#}
-
                                     </div>
-{#                                     result#}
-{#                                    {{ forloop.parentloop.counter }}#}
-{#                                     profession#}
-{#                                    {{ forloop.counter }}#}
                                 </div>
 
-{#                                <div class="m-2 border col-8">#}
-                                <div class="col-8">
-{#                                    <div class="m-2 border">#}
+                                <div class="col-7">
                                     <div class="pt-1">
-{#                                        Category:#}
-{#                                        {{ profession.profession_info.category }}#}
                                         <button class="btn btn-light text-dark shadow-none" type="button" data-bs-toggle="collapse"
-                                                    data-bs-target="#profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+                                                    data-bs-target="#category-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
                                                     aria-expanded="false"
-                                                    aria-controls="profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
-                                                {{ profession.profession_info.category }}
+                                                    aria-controls="category-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">
+                                                {{ category.info.name }}
                                         </button>
-{#                                        <hr class="d-inline-block jumbotron w-50"/>#}
-{#                                        <div class="d-grid gap-2 my-2">#}
-{#                                            <button class="btn btn-light" type="button" data-bs-toggle="collapse"#}
-{#                                                    data-bs-target="#profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"#}
-{#                                                    aria-expanded="false"#}
-{#                                                    aria-controls="profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">#}
-{#                                                {{ profession.profession_info.category }}#}
-{#                                            </button>#}
-{#                                        </div>#}
-{#                                        <a class="btn btn-primary" data-bs-toggle="collapse"#}
-{#                                        <a data-bs-toggle="collapse"#}
-{#                                           href="#profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"#}
-{#                                           role="button" aria-expanded="false"#}
-{#                                           aria-controls="profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}">#}
-{#                                            Toggle element#}
-{#                                        </a>#}
-
                                     </div>
-                                    <div id="profession-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
+
+                                    <div id="category-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
 {#                                         class="collapse border m-2">#}
-                                         class="collapse">
+                                         class="collapse px-4 my-2">
 {#                                        <div class="m-2 border">#}
                                         <div>
                                             <div>Опис:</div>
-                                            <div>{{ profession.profession_info.description }}</div>
+                                            <div>{{ category.info.description }}</div>
                                         </div>
 {#                                        <div class="m-2 border">#}
                                         <div>
                                             <div>Приклади:</div>
-                                            <div>{{ profession.profession_info.examples }}</div>
+                                            <div>{{ category.info.examples }}</div>
                                         </div>
                                     </div>
 
