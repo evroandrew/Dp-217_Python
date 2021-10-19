@@ -15,7 +15,7 @@ def questioning_view(request):
 def remove_result(request, url):
     if remove_user_result(request, url):
         return JsonResponse({})
-    return JsonResponse({'status': '500'})
+    return HttpResponse(status=500)
 
 
 @csrf_exempt
