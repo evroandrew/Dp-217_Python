@@ -1,9 +1,9 @@
 import json
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
-from questioning.models import TestResult
+from questioning.models import TestResult, UserTestResult
 from .services import save_questions_results, create_answer, get_all_answers, remove_user_result
 
 
@@ -44,3 +44,14 @@ def questioning_results(request, link=''):
         else:
             title = {'title': 'Результат опитування не знайдено', }
     return render(request, 'questioning_results_full.html', title)
+
+
+@csrf_exempt
+def delete_result(request, id):
+    result = get_object_or_404(UserTestResult, result_id=id)
+
+    if request.user != result.user_id:
+        return HttpResponse(status=403)
+
+    result.delete()
+    return HttpResponse(status=200)

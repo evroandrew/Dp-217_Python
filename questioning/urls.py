@@ -7,5 +7,6 @@ urlpatterns = [
     path('results/remove/<slug:url>', views.remove_result),
     path('results/<slug:link>', views.questioning_results),
     path('results/', views.questioning_results, name='questioning_results'),
+    path('results/delete/<int:id>', views.delete_result),
 ]
 
