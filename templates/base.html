@@ -14,24 +14,24 @@
     {% block scripts %}{% endblock %}
 </head>
 <body>
-    <div id="base-container">
+<div id="base-container">
 
-        <header>
-            {% include "base_header.html" %}
-        </header>
+    <header>
+        {% include "base_header.html" %}
+    </header>
 
-        <main>
-            <div id="content">
-                {{ content }}
-                {% block content %}{% endblock %}
-            </div>
-        </main>
+    <main>
+        <div id="content">
+            {{ content }}
+            {% block content %}{% endblock %}
+        </div>
+    </main>
 
-        <footer>
-            {% include "base_footer.html" %}
-        </footer>
+    <footer>
+        {% include "base_footer.html" %}
+    </footer>
 
-    </div>
+</div>
 
 </body>
 </html>

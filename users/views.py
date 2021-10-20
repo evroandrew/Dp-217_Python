@@ -2,14 +2,18 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
 from .forms import CustomUserCreationForm
+from .models import CustomUser
+from questioning.services import get_decoded_user_results, make_top_n_results
 
 
 def profile_view(request):
-    return render(request, 'users/profile.html', {'user': request.user})
+    user = CustomUser.objects.get(id=request.user.id)
+    results = get_decoded_user_results(user)
+    make_top_n_results(results, 3)
+    return render(request, 'users/profile.html', {'user': user, 'results': results})
 
 
 def registration_view(request):
-
     if request.method == "POST":
         form = CustomUserCreationForm(request.POST)
         if form.is_valid():

@@ -9,9 +9,9 @@ https://docs.djangoproject.com/en/3.2/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/3.2/ref/settings/
 """
-
-from pathlib import Path
+import sys
 import os
+from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 # BASE_DIR = Path(__file__).resolve().parent.parent
@@ -31,6 +31,8 @@ ALLOWED_HOSTS = []
 # Application definition
 
 INSTALLED_APPS = [
+    'django_crontab',
+    'questioning',
     'users',
     'universearch',
     'django.contrib.admin',
@@ -73,7 +75,6 @@ WSGI_APPLICATION = 'enrollment_assistant.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/3.2/ref/settings/#databases
-
 
 # If you have any questions with db connecting - you should use path variables
 DATABASES = {
@@ -127,11 +128,20 @@ STATICFILES_DIRS = (
 
 STATIC_URL = '/static/'
 
-
 # Default primary key field type
 # https://docs.djangoproject.com/en/3.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+if sys.platform != 'win32':
+    CRONJOBS = [
+        ('10 8 * * *', 'questioning.cron.remove_obsolete_records')
+    ]
+"""
+Run this command to add all the defined CRONJOBS to crontab(*nix cron utility). 
+Make sure to run this command every time CRONJOBS is changed in any way.
+python manage.py crontab add
+"""
 
 # Custom authentication user model
 AUTH_USER_MODEL = "users.CustomUser"
@@ -141,7 +151,6 @@ AUTHENTICATION_BACKENDS = ['users.backends.EmailUsernameBackend']
 
 # Redirect to home URL after login
 LOGIN_REDIRECT_URL = '/'
-
 
 # Redirect emails to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
