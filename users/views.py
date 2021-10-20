@@ -1,17 +1,15 @@
-import json
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
 from django.contrib import messages
 from .forms import CustomUserCreationForm
 from .models import CustomUser
-from .services import get_user_results, make_top_n_results
+from questioning.services import get_decoded_user_results, make_top_n_results
 
 
 def profile_view(request):
     user = CustomUser.objects.get(id=request.user.id)
-    results = get_user_results(user)
+    results = get_decoded_user_results(user)
     make_top_n_results(results, 3)
-
     return render(request, 'users/profile.html', {'user': user, 'results': results})
 
 
