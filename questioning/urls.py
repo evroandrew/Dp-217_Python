@@ -8,3 +8,4 @@ urlpatterns = [
     path('results/<slug:link>', views.questioning_results),
     path('results/', views.questioning_results, name='questioning_results'),
 ]
+
