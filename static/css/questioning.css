@@ -5,12 +5,14 @@
     font-size: 36px;
     line-height: 1.2;
 }
+
 .q__h2 {
     color: #000;
     font-weight: 400;
     font-size: 36px;
     line-height: 1.2;
 }
+
 .q__h3 {
     text-align: center;
     color: #000;
@@ -18,6 +20,7 @@
     font-size: 24px;
     line-height: 1.2;
 }
+
 .q__description {
     padding: 70px;
     font-size: 18px;
@@ -36,7 +39,6 @@
     align-content: space-between;
     flex-wrap: wrap;
     margin: 10px auto 10px -5px;
-    width: calc(100% + 10px);
 }
 
 .c-button {

@@ -3,6 +3,7 @@ from . import views as users_views
 
 
 urlpatterns = [
-    path('', users_views.profile_view),
+    path('', users_views.profile_view, name='profile'),
     path('', include('django.contrib.auth.urls')),
+    path('registration', users_views.registration_view, name='registration'),
 ]

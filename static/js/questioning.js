@@ -50,11 +50,10 @@ function ajaxRequest(values, answer_id) {
     if (values['results'].length < 20) {
         $.ajax({
             type: "POST",
-            url: '/questioning_ajax/',
+            url: '/questioning/ajax/',
             data: JSON.stringify(SendInfo),
             dataType: 'text',
             success: function (res) {
-                console.log("Update Successful");
                 $("#main_container").html(res);
             },
             error: function (res, error) {
@@ -64,11 +63,10 @@ function ajaxRequest(values, answer_id) {
     } else {
         $.ajax({
             type: "POST",
-            url: '/questioning_results/',
+            url: '/questioning/results/',
             data: JSON.stringify(values),
             dataType: 'text',
             success: function (res) {
-                console.log("Update Successful");
                 $("#main_container").html(res);
             },
             error: function (res, error) {
