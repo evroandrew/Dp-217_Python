@@ -23,3 +23,8 @@ class CustomUserChangeForm(UserChangeForm):
                   'gender')
         # fields = '__all__'
         exclude = ('password',)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields['username'].disabled = True
+        self.fields['email'].disabled = True
