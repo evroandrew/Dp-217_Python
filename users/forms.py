@@ -12,6 +12,8 @@ class CustomUserCreationForm(UserCreationForm):
 
 class CustomUserChangeForm(UserChangeForm):
 
+    password = None
+
     class Meta:
         model = CustomUser
         fields = ('username',
@@ -21,10 +23,22 @@ class CustomUserChangeForm(UserChangeForm):
                   'city',
                   'phone',
                   'gender')
-        # fields = '__all__'
-        exclude = ('password',)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         self.fields['username'].disabled = True
         self.fields['email'].disabled = True
+        self.fields['username'].label = "Ім'я користувача"
+        self.fields['email'].label = "Пошта"
+        self.fields['first_name'].label = "Ім'я"
+        self.fields['last_name'].label = "Прізвище"
+        self.fields['phone'].label = "Телефон"
+        self.fields['gender'].label = "Стать"
+        self.fields['city'].label = "Місто"
+
+
+class CustomUserAdminChangeForm(UserChangeForm):
+
+    class Meta:
+        model = CustomUser
+        fields = '__all__'
