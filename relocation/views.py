@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect
 from .forms import HousingForm
-from .models import University, Housing, City
 
 
 def get_housings_view(request):
