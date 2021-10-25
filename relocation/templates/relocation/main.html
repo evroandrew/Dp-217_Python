@@ -1,15 +1,20 @@
 {% extends 'base.html' %}
 {% block content %}
-<form method="post">{% csrf_token %}
-    <div class="mb-3">
-      <label for="region_filter" class="form-label">Region</label>
-      <input type="text" class="form-control" id="region_filter" name="region_filter" placeholder="Search region...">
+<div class="container-fluid">
+  <form method="post">{% csrf_token %}
+    <div class="row">
+      <div class="col-md-4">
+        <p class="h3 mt-3 mb-3">{{ form.region.label }}</p>{{ form.region_filter }}{{ form.region }}
+      </div>
+      <div class="col-md-4">
+        <p class="h3 mt-3 mb-3">{{ form.city.label }}</p>{{ form.city_filter }}{{ form.city }}
+      </div>
+      <div class="col-md-4">
+        <p class="h3 mt-3 mb-3">{{ form.uni.label }}</p>{{ form.uni_filter }}{{ form.uni }}
+      </div>
     </div>
-    <div class="mb-3">
-      {{ form.region }}
-      {{ form.city }}
-    </div>
-    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=filter">Filter</button>
-    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=submit">Submit</button>
-</form>
+    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=filter">Фільтрувати</button>
+    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=submit">Ввести список жител</button>
+  </form>
+</div>
 {% endblock %}
