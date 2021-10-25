@@ -1,10 +1,13 @@
 from django.shortcuts import render, redirect
 from .forms import HousingForm
+from .models import University, Housing, City
 
 
 def get_housings_view(request):
     try:
-        return render(request, 'relocation/main.html', {'form': HousingForm(request.POST)})
+        form = HousingForm(request.POST)
+        return render(request, 'relocation/main.html', {'form': form, 'houses': form.get_housings()})
     except TypeError as e:
+        print('ня пока')
         raise e
     return redirect('/')

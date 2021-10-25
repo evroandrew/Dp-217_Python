@@ -90,3 +90,10 @@ class HousingForm(forms.Form):
             self.fields['city'].queryset = self.qs['cities']
         if self.qs['unies'] is not None:
             self.fields['uni'].queryset = self.qs['unies']
+
+    def get_housings(self):
+        """Set option lists for the choice fields (dropdown elements)."""
+        if uni_id := self.data.get('uni')[0]:
+            if uni := Unies.get(uni_id):
+                return Housings.all_for_uni(uni)
+        return tuple()
