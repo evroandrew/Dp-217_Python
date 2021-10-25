@@ -18,7 +18,10 @@ class HousingForm(forms.Form):
     region_filter = forms.CharField(
         max_length=50,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Шукати області...'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mb-3',
+            'placeholder': 'Шукати області...',
+            }),
         )
     city = forms.ModelChoiceField(
         queryset=Cities.all(),
@@ -30,7 +33,10 @@ class HousingForm(forms.Form):
     city_filter = forms.CharField(
         max_length=50,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Шукати міста...'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mb-3',
+            'placeholder': 'Шукати міста...',
+            }),
         )
     uni = forms.ModelChoiceField(
         queryset=Unies.all(),
@@ -42,7 +48,10 @@ class HousingForm(forms.Form):
     uni_filter = forms.CharField(
         max_length=50,
         required=False,
-        widget=forms.TextInput(attrs={'class': 'form-control mb-3', 'placeholder': 'Шукати ВУЗи...'}),
+        widget=forms.TextInput(attrs={
+            'class': 'form-control mb-3',
+            'placeholder': 'Шукати ВУЗи...',
+            }),
         )
 
     def __init__(self, form_data, *args, **kwargs):
@@ -53,7 +62,8 @@ class HousingForm(forms.Form):
         self.__set_querysets()
 
     def __format_data(self, form_data):
-        """Switch data to mutable format and construct querysets if possible."""
+        """Switch data to mutable a format type and construct querysets
+        if possible."""
         self.data = dict(form_data)
         self.data['region_filter'] = form_data.get('region_filter', '')
         self.data['city_filter'] = form_data.get('city_filter', '')
@@ -62,15 +72,18 @@ class HousingForm(forms.Form):
         return self.data
 
     def __create_querysets(self, form_data):
-        """Construct querysets based on filters and chosen ids from form data."""
-        if len(self.data['region_filter']) > 2:
-            self.qs['regions'] = Regions.by_name(self.data['region_filter'])
+        """Create querysets based on filters and chosen ids from form data."""
+        prompt = self.data['region_filter']
+        if len(prompt) > 2:
+            self.qs['regions'] = Regions.by_name(prompt)
         region_id = form_data.get('region')
-        if len(self.data['city_filter']) > 2 or region_id:
-            self.qs['cities'] = Cities.by_region_or_name(region_id, self.data['city_filter'])
+        prompt = self.data['city_filter']
+        if len(prompt) > 2 or region_id:
+            self.qs['cities'] = Cities.by_region_or_name(region_id, prompt)
         city_id = form_data.get('city')
-        if len(self.data['uni_filter']) > 2 or city_id:
-            self.qs['unies'] = Unies.by_city_or_name(city_id, self.data['uni_filter'])
+        prompt = self.data['uni_filter']
+        if len(prompt) > 2 or city_id:
+            self.qs['unies'] = Unies.by_city_or_name(city_id, prompt)
         return self.qs
 
     def __set_initials(self):
@@ -90,3 +103,10 @@ class HousingForm(forms.Form):
             self.fields['city'].queryset = self.qs['cities']
         if self.qs['unies'] is not None:
             self.fields['uni'].queryset = self.qs['unies']
+
+    def get_housings(self):
+        """Get the list of all housings if the university is chosen."""
+        if uni_id := self.data.get('uni')[0]:
+            if uni := Unies.get(uni_id):
+                return Housings.all_for_uni(uni)
+        return tuple()

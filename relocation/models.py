@@ -16,6 +16,12 @@ class Housing(models.Model):
     university = models.ForeignKey(University, models.SET_NULL, blank=True,
                                    related_name='hostels',
                                    null=True, verbose_name='ВУЗ', )
+    address = models.CharField(max_length=50, verbose_name='адреса', default='', )
+    phone = models.CharField(max_length=13, verbose_name='телефон', default='', )
+
+    @property
+    def belongs_to_uni(self):
+        return bool(self.university)
 
     class Meta:
         verbose_name = 'житло'

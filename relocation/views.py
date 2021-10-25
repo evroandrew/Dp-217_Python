@@ -4,7 +4,8 @@ from .forms import HousingForm
 
 def get_housings_view(request):
     try:
-        return render(request, 'relocation/main.html', {'form': HousingForm(request.POST)})
+        form = HousingForm(request.POST)
+        return render(request, 'relocation/main.html', {'form': form, 'houses': form.get_housings()})
     except TypeError as e:
-        raise e
+        print(e)
     return redirect('/')

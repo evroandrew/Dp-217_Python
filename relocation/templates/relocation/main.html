@@ -13,8 +13,31 @@
         <p class="h3 mt-3 mb-3">{{ form.uni.label }}</p>{{ form.uni_filter }}{{ form.uni }}
       </div>
     </div>
-    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=filter">Фільтрувати</button>
-    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=submit">Ввести список жител</button>
+    <button type="submit" class="btn btn-primary" formaction="/relocation/">Фільтрувати</button>  Для результату оберіть університет.
   </form>
+</div>
+<div class="container-fluid">
+  <table class="table table-striped">
+    <thead>
+      <tr>
+        <th scope="col">Назва</th>
+        <th scope="col">Тип</th>
+        <th scope="col">Адреса</th>
+        <th scope="col">Телефон</th>
+        <th scope="col">Належить ВУЗу?</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for house in houses %}
+        <tr>
+          <th scope="row">{{ house.name }}</th>
+          <td>{{ house.get_type_display }}</td>
+          <td>{{ house.address }}</td>
+          <td>{{ house.phone }}</td>
+          <td>{% if house.belongs_to_uni %}&#10004;{% else %}&times;{% endif %}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
 </div>
 {% endblock %}
