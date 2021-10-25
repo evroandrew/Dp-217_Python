@@ -34,4 +34,11 @@ $(document).ready(function() {
         });
         return false;
     });
+
+    $("#profile-update-form").change(function () {
+        $("#profile-update-submit-btn")
+            .removeClass("disabled")
+            .removeClass("btn-secondary")
+            .addClass("btn-primary");
+    })
 });
