@@ -1,8 +1,12 @@
-from .models import Housing, University, City
+from .models import Housing, University, City, Region
 from django.db.models import Q
 
 
 class CityService:
+
+    @staticmethod
+    def by_region(region_id:str):
+        return City.objects.filter(region=Region.objects.filter(id=region_id).first())
 
     @staticmethod
     def get(city_id:str):

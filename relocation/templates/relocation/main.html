@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<form method="post">{% csrf_token %}
+    <div class="mb-3">
+      <label for="region_filter" class="form-label">Region</label>
+      <input type="text" class="form-control" id="region_filter" name="region_filter" placeholder="Search region...">
+    </div>
+    <div class="mb-3">
+      {{ form.region }}
+      {{ form.city }}
+    </div>
+    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=filter">Filter</button>
+    <button type="submit" class="btn btn-primary" formaction="/relocation/?action=submit">Submit</button>
+</form>
+{% endblock %}

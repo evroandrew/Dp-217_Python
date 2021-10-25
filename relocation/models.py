@@ -1,5 +1,5 @@
 from django.db import models
-from univer_search.models import City, University
+from universearch.models import Region, City, University
 
 
 class Housing(models.Model):
