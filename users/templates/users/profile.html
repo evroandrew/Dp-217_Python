@@ -38,6 +38,17 @@
                     </h5>
                 </div>
 
+                <div id="empty-history-message" class="text-center {% if results %}d-none{% endif %}">
+                    <div>
+                        Збережені результати відсутні
+                    </div>
+                    <div>
+                        <a href="/questioning">
+                            Пройти опитування
+                        </a>
+                    </div>
+                </div>
+
                 {% for result in results %}
 
                     {% include "users/result_card.html" with result=result %}
