@@ -106,7 +106,7 @@ class HousingForm(forms.Form):
 
     def get_housings(self):
         """Get the list of all housings if the university is chosen."""
-        if uni_id := self.data.get('uni')[0]:
-            if uni := Unies.get(uni_id):
+        if uni_id_post := self.data.get('uni'):
+            if uni := Unies.get(uni_id_post[0]):
                 return Housings.all_for_uni(uni)
         return tuple()
