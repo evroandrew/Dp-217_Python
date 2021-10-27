@@ -28,44 +28,21 @@
             <div class="col-4">
                 <div class="progress mx-4 mt-3">
 
-                    {% if percent == "100" %}
+                    <div class="progress-bar progress-bar-striped text-white
 
-                        <div class="progress-bar progress-bar-striped bg-success text-white" role="progressbar"
-                                 style="width: {{ percent }}%;"
-                                 aria-valuenow="{{ percent }}"
-                                 aria-valuemin="0" aria-valuemax="100">
-                                {{ percent }}%
-                        </div>
-
-
-                    {% elif percent > "70" %}
-
-                        <div class="progress-bar progress-bar-striped bg-success text-white" role="progressbar"
-                                 style="width: {{ percent }}%;"
-                                 aria-valuenow="{{ percent }}"
-                                 aria-valuemin="0" aria-valuemax="100">
-                                {{ percent }}%
-                        </div>
-
-                    {% elif  percent >= "50" %}
-
-                        <div class="progress-bar progress-bar-striped text-white" role="progressbar"
-                                 style="width: {{ percent }}%;"
-                                 aria-valuenow="{{ percent }}"
-                                 aria-valuemin="0" aria-valuemax="100">
-                                {{ percent }}%
-                        </div>
-
-                    {% else %}
-
-                        <div class="progress-bar progress-bar-striped bg-warning text-white" role="progressbar"
-                                 style="width: {{ percent }}%;"
-                                 aria-valuenow="{{ percent }}"
-                                 aria-valuemin="0" aria-valuemax="100">
-                                {{ percent }}%
-                        </div>
-
+                    {% if percent|add:"0" > 70 %}
+                         bg-success
+                    {% elif  percent|add:"0" < 50 %}
+                        bg-warning
                     {% endif %}
+
+                        "
+                        role="progressbar"
+                        style="width: {{ percent }}%;"
+                        aria-valuenow="{{ percent }}"
+                        aria-valuemin="0" aria-valuemax="100">
+                        {{ percent }}%
+                    </div>
 
                 </div>
             </div>
@@ -83,12 +60,12 @@
                 <div id="category-details-{{ forloop.parentloop.counter }}-{{ forloop.counter }}"
                      class="collapse px-4 my-2">
                     <div>
-                        <div>Опис:</div>
+                        <div class="fw-bold">Опис:</div>
                         <div>{{ category.info.description }}</div>
                     </div>
 
                     <div>
-                        <div>Приклади:</div>
+                        <div class="fw-bold mt-2">Приклади:</div>
                         <div>{{ category.info.examples }}</div>
                     </div>
                 </div>
