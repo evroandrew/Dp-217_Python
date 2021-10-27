@@ -51,11 +51,25 @@ class RelocationTestCase(TestCase):
             ),
             'filters': (
                 {
-                    'input': {'uni': []},
+                    'input': {},
                     'output': {
                         'regions': tuple(cls.regions[i] for i in cls.regions),
                         'cities': tuple(cls.cities[i] for i in cls.cities),
                         'unies': tuple(cls.unies[i] for i in cls.unies),
+                        'housings': tuple(),
+                    },
+                },
+                {
+                    'input': {
+                        'region_filter': 'Region-R4',
+                        'city_filter': 'City-R1C1',
+                        'uni_filter': 'Uni-R3C1U1',
+                        },
+                    'output': {
+                        'regions': (cls.regions['Region-R4'], ),
+                        'cities': (cls.cities['City-R1C1'], ),
+                        'unies': (cls.unies['Uni-R3C1U1'], ),
+                        'housings': tuple(),
                     },
                 },
             ),
@@ -71,3 +85,4 @@ class RelocationTestCase(TestCase):
             self.assertSequenceEqual(case['output']['regions'], form.fields['region'].queryset)
             self.assertSequenceEqual(case['output']['cities'], form.fields['city'].queryset)
             self.assertSequenceEqual(case['output']['unies'], form.fields['uni'].queryset)
+            self.assertSequenceEqual(case['output']['housings'], form.get_housings())
