@@ -12,7 +12,6 @@ def get_universities_api(region: str, city: str, field: str, speciality: str) ->
         'city': city,
         'field': field,
         'speciality': speciality
-
     }
     try:
         responce = requests.get(url, params=params)
