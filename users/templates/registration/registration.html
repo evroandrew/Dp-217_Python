@@ -10,74 +10,33 @@
             <div class="card-body">
                 <form method="POST">
                     {% csrf_token %}
-                    <div class="form-group mb-2">
-                        <label for="registration-username">
-                            Ім'я користувача
-                        </label>
-                        <input type="text" class="form-control" id="registration-username"
-                               placeholder="" name="{{ form.username.html_name }}"
-                               {% if form.username.value %}
-                                   value="{{ form.username.value }}"
-                               {% endif %}
-                        />
-                        <div class="small">
-                            {{ form.username.help_text }}
-                        </div>
-                    </div>
+                    {% for field in form.visible_fields %}
+                        <div class="form-group  mb-2">
+                            <div>{{ field.label_tag }}</div>
+                            <input class="form-control"
+                                   placeholder=""
+                                   name="{{ field.html_name }}"
 
-                    <div class="form-group  mb-2">
-                        <label for="registration-email">
-                            Пошта
-                        </label>
-                        <input type="text" class="form-control" id="registration-email"
-                               placeholder="" name="{{ form.email.html_name }}"
-                               {% if form.email.value %}
-                                   value="{{ form.email.value }}"
-                               {% endif %}
-                        />
-                        <div class="small">
-                            {{ form.email.help_text }}
-                        </div>
-                    </div>
+                                   {% if field.value %}
+                                       value="{{ field.value }}"
+                                   {% endif %}
 
-                    <div class="form-group  mb-2">
-                        <label for="registration-password1">
-                            Пароль
-                        </label>
-                        <input type="password" class="form-control" id="registration-password1"
-                               placeholder="" name="{{ form.password1.html_name }}"
-                               {% if form.password1.value %}
-                                   value="{{ form.password1.value }}"
-                               {% endif %}
-                        />
-                        <div class="small">
-                            {{ form.password1.help_text }}
+                                   {% if field.html_name in 'password1,password2' %}
+                                       type="password"
+                                   {% else %}
+                                       type="text"
+                                   {% endif %}
+                            />
+                            <div class="small">
+                                {{ field.help_text }}
+                            </div>
+                            {% if field.errors %}
+                               <div class="text-danger">
+                                   {{ field.errors }}
+                               </div>
+                            {% endif %}
                         </div>
-                    </div>
-
-                    <div class="form-group  mb-2">
-                        <label for="registration-password2">
-                            Пароль ще раз
-                        </label>
-                        <input type="password" class="form-control" id="registration-password2"
-                               placeholder="" name="{{ form.password2.html_name }}"
-                               {% if form.password2.value %}
-                                   value="{{ form.password2.value }}"
-                               {% endif %}
-                        />
-                        <div class="small">
-                            {{ form.password2.help_text }}
-                        </div>
-                    </div>
-
-                    {% if form.errors %}
-                        <div class="text-danger my-3">
-                            {% for value in form.errors.values %}
-                                <div>{{ value }}</div>
-                            {% endfor %}
-                        </div>
-
-                    {% endif %}
+                    {% endfor %}
 
                     <div class="d-grid gap-2 my-3">
                         <button type="submit" id="registration-submit" class="btn btn-primary" >

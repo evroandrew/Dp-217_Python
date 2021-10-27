@@ -4,10 +4,39 @@ from .models import CustomUser
 
 
 class CustomUserCreationForm(UserCreationForm):
+    error_messages = {
+        'password_mismatch': 'Паролі не співпадають',
+    }
 
     class Meta:
         model = CustomUser
-        fields = ('email', 'username')
+        fields = ('username', 'email', 'password1', 'password2')
+        error_messages = {
+            'username': {
+                'unique': "Ім'я вже зайняте",
+                'required': "Заповнення обов'язкове"
+            },
+            'email': {
+                'unique': "Пошта вже зайнята",
+                'invalid': "Некоректна адреса",
+                'required': "Заповнення обов'язкове"
+            },
+        }
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        self.fields['username'].label = "Ім'я користувача"
+        self.fields['username'].help_text = 'До 150 символів. Букви, цифри та @ . + - _'
+
+        self.fields['email'].label = "Пошта"
+        self.fields['email'].help_text = 'Ваша електронна пошта'
+
+        self.fields['password1'].label = 'Пароль'
+        self.fields['password1'].help_text = 'Від 8 символів, не повністю з цифр'
+
+        self.fields['password2'].label = 'Підтвердження пароля'
+        self.fields['password2'].help_text = 'Введіть пароль ще раз'
 
 
 class CustomUserChangeForm(UserChangeForm):
