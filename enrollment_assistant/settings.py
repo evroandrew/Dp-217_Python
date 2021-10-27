@@ -35,6 +35,7 @@ INSTALLED_APPS = [
     'questioning',
     'users',
     'universearch',
+    'relocation',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -135,7 +136,8 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 if sys.platform != 'win32':
     CRONJOBS = [
-        ('10 8 * * *', 'questioning.cron.remove_obsolete_records')
+        ('10 8 * * *', 'questioning.cron.remove_obsolete_records'),
+        ('* * * * *', 'users.cron.remove_users'),
     ]
 """
 Run this command to add all the defined CRONJOBS to crontab(*nix cron utility). 
