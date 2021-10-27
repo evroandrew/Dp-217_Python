@@ -44,11 +44,10 @@ def get_universities(request):
         context = {"error": "Помилка з'єднання. Спробуйте пізніше."}
     elif isinstance(universities[0].get("error"), int):
         context = {"error": f'Помилка номер {universities[0]["error"]}.'}
-
     else:
         context = {"universities": universities}
 
     if "error" in context.keys():
         return render(request, 'universearch/error_handler.html', context=context)
-    else:
-        return render(request, 'universearch/results.html', context=context)
+    
+    return render(request, 'universearch/results.html', context=context)
