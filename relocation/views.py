@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
+import json
 from .forms import HousingForm, Housings
 
 
@@ -17,4 +18,5 @@ def get_housings_view_2(request):
 
 
 def get_housings_json(request):
-    return JsonResponse(Housings.all_json(), safe=False, json_dumps_params={'ensure_ascii': False})
+    data = json.dumps(Housings.all_json())
+    return JsonResponse(data, safe=False, json_dumps_params={'ensure_ascii': False})
