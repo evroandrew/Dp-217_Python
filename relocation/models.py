@@ -23,6 +23,16 @@ class Housing(models.Model):
     def belongs_to_uni(self):
         return bool(self.university)
 
+    @property
+    def json(self):
+        return {
+            'id': self.id,
+            'housing': self.name,
+            'university': self.university.name or 'none',
+            'city': self.city.name,
+            'region': self.city.region.name
+            }
+
     def __str__(self):
         return f'{self.name} {self.city.name}{(" " + self.university.name) if self.belongs_to_uni else ""}'
 
