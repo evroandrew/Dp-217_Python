@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'relocation/js/relocation_2.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <form method="post">{% csrf_token %}
+            <div class="d-flex my-4">
+                <div class="col-4 col-lg-2 p-2">
+                    <label class="h3 d-block" for="region-select">Регіон</label>
+                    <select id="region-select" class="w-100"></select>
+                </div>
+                <div class="col-4 col-lg-2 p-2">
+                    <label class="h3 d-block" for="city-select">Місто</label>
+                    <select id="city-select" class="w-100"></select>
+                </div>
+                <div class="col-4 col-lg-2 p-2">
+                    <label class="h3 d-block" for="university-select">Університет</label>
+                    <select id="university-select" class="w-100"></select>
+
+                </div>
+            </div>
+        </form>
+
+        <div class="m-2">
+            <button id="clear-filters-button" class="btn btn-warning">Очистити</button>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4">
+        <table class="table table-striped" id="results-table">
+            <thead>
+                <tr>
+                    <th scope="col">Назва</th>
+                    <th scope="col">Місто</th>
+                    <th scope="col">ВНЗ</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
