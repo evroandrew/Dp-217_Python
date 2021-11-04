@@ -1,8 +1,6 @@
-import json
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
-from .forms import HousingForm
-from .models import Housing
+from .forms import HousingForm, Housings
 
 
 def get_housings_view(request):
@@ -19,26 +17,4 @@ def get_housings_view_2(request):
 
 
 def get_housings_json(request):
-    housings_objects = Housing.objects.all()
-    data = []
-
-    for housing in housings_objects:
-        id = housing.id
-        if housing.university:
-            university_name = housing.university.name
-        else:
-            university_name = 'none'
-        city = housing.city
-        city_name = city.name
-        housing_name = housing.name
-        region_name = housing.city.region.name
-
-        data.append({
-            'id': id,
-            'housing_name': housing_name,
-            'university_name': university_name,
-            'city_name': city_name,
-            'region_name': region_name
-        })
-    response = json.dumps(data)
-    return JsonResponse(response, safe=False, json_dumps_params={'ensure_ascii': False})
+    return JsonResponse(Housings.all_json(), safe=False, json_dumps_params={'ensure_ascii': False})

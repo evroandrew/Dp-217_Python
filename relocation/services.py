@@ -64,6 +64,10 @@ class UniversityService:
 class HousingService:
 
     @staticmethod
+    def all():
+        return Housing.objects.all()
+
+    @staticmethod
     def by_city_for_uni(uni:University, city:City):
         q = Housing.objects.filter(city=city)
         return q.filter(Q(university=uni) | Q(university__isnull=True))
@@ -71,3 +75,7 @@ class HousingService:
     @staticmethod
     def all_for_uni(uni:University):
         return HousingService.by_city_for_uni(uni=uni, city=uni.city)
+
+    @staticmethod
+    def all_json():
+        return [housing.json for housing in HousingService.all()]
