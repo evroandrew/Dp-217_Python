@@ -79,5 +79,4 @@ class HousingService:
 
     @staticmethod
     def all_json():
-        housings = [housing.json for housing in HousingService.all()]
-        return json.dumps(housings)
+        return json.dumps([h.json for h in HousingService.all()])
