@@ -18,3 +18,7 @@ def get_housings_view_2(request):
 
 def get_housings_json(request):
     return JsonResponse(Housings.all_json(), safe=False, json_dumps_params={'ensure_ascii': False})
+
+
+def get_tickets_view(request):
+    return render(request, 'relocation/tickets.html')

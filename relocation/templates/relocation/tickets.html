@@ -1,0 +1,72 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% block scripts %}
+    <script src="{% static 'relocation/js/tickets.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="container-fluid">
+        <form method="post">{% csrf_token %}
+            <div class="form-group d-flex my-4">
+                <div class="col-4 col-lg-2 p-2">
+                    <label class="h4 d-block" for="point1-input">Звідки</label>
+                    <input type="text" id="point1-input" class="w-100">
+                </div>
+                <div class="d-flex align-items-end">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"
+                         class="bi bi-arrow-left-right mb-3" viewBox="0 0 16 16">
+                        <path fill-rule="evenodd" d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>
+                    </svg>
+                </div>
+                <div class="col-4 col-lg-2 p-2">
+                    <label class="h4 d-block" for="point2-input">Куди</label>
+                    <input type="text" id="point2-input" class="w-100">
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="h4 d-block" for="dateInput">Дата відправлення</label>
+                <input type="date" id="dateInput">
+            </div>
+
+            <div class="form-group">
+                <div class="mt-4 h4">Тип</div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="trainCheck">
+                    <label class="form-check-label" for="trainCheck">
+                        Залізничні
+                    </label>
+                </div>
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="busCheck">
+                    <label class="form-check-label" for="busCheck">
+                        Автобусні
+                    </label>
+                </div>
+            </div>
+        </form>
+
+        <div class="my-4">
+            <button id="search-tickets-button" class="btn btn-primary">Знайти</button>
+        </div>
+    </div>
+
+    <div class="container-fluid mt-4">
+        <table class="table table-striped" id="results-table">
+            <thead>
+            <tr>
+                <th scope="col">Тип</th>
+                <th scope="col">Відправлення</th>
+                <th scope="col">Прибуття</th>
+                <th scope="col">Ціна</th>
+            </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+{% endblock %}
