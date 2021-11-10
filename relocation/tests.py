@@ -90,6 +90,6 @@ class RelocationTestCase(TestCase):
 
     def test_housing_parsing(self):
         before = Housing.objects.all().count()
-        parse_housings_view(RequestFactory().get('housings/parse'))
+        parse_housings_view(RequestFactory().get('housings/parse?city_name=Dnipro'))
         after = Housing.objects.all().count()
         self.assertNotEqual(before, after)
