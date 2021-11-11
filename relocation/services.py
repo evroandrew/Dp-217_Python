@@ -5,14 +5,14 @@ import os
 import requests
 
 
-def parse_housings(city: str) -> list:
+def get_housings() -> list:
     url = os.environ.get("UNI_PARSE_URL")  # http://127.0.0.1:8090/relocation/data
-    response = requests.get(url, params={'city': city,})
+    response = requests.get('http://127.0.0.1:8090/relocation/data')
     return response.json() if response.status_code == 200 else {}
 
 
-def fill_housings(city: str) -> list:
-    housings = parse_housings(city).get('content', [])
+def parse_housings() -> list:
+    housings = get_housings().get('content', [])
     for housing_dict in housings:
         if housing := Housing.objects.filter(name=housing_dict.get('name', '')).first():
             housing.address = housing_dict.get('address') or housing.address

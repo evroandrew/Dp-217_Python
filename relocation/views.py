@@ -1,7 +1,7 @@
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from .forms import HousingForm
-from .services import HousingService as Housings, fill_housings
+from .services import HousingService as Housings
 
 
 def get_housings_view(request):
@@ -19,8 +19,3 @@ def get_housings_view_2(request):
 
 def get_housings_json(request):
     return JsonResponse(Housings.all_json(), safe=False, json_dumps_params={'ensure_ascii': False})
-
-
-def parse_housings_view(request):
-    fill_housings(request.GET.get('city_name'))
-    return redirect('/')
