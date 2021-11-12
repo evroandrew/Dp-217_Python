@@ -11,7 +11,7 @@ def get_housings() -> list:
     return response.json() if response.status_code == 200 else {}
 
 
-def parse_housings() -> list:
+def parse_housings():
     housings = get_housings().get('content', [])
     for housing_dict in housings:
         if housing := Housing.objects.filter(name=housing_dict.get('name', '')).first():

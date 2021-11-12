@@ -1,7 +1,7 @@
 from django.test import TestCase, RequestFactory
 from relocation.models import Region, City, University, Housing
 from relocation.forms import HousingForm
-from relocation.views import parse_housings_view
+from relocation.services import parse_housings
 
 class RelocationTestCase(TestCase):
     @classmethod
@@ -90,6 +90,6 @@ class RelocationTestCase(TestCase):
 
     def test_housing_parsing(self):
         before = Housing.objects.all().count()
-        parse_housings_view(RequestFactory().get('housings/parse?city_name=Dnipro'))
+        parse_housings()
         after = Housing.objects.all().count()
         self.assertNotEqual(before, after)
