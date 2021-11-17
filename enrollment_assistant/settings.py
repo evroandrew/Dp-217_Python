@@ -157,3 +157,7 @@ LOGIN_REDIRECT_URL = '/'
 
 # Redirect emails to console
 EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+
+
+TICKETS_SERVICE_URL = os.environ.get('TICKETS_SERVICE_URL', 'http://127.0.0.1:5000')
+TICKETS_SEARCH_URL = TICKETS_SERVICE_URL + '/search'

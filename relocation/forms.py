@@ -1,3 +1,5 @@
+import json
+import datetime
 from django import forms
 from .services import (
     RegionService as Regions,
@@ -5,6 +7,27 @@ from .services import (
     UniversityService as Unies,
     HousingService as Housings,
     )
+
+
+class TicketsSearchForm(forms.Form):
+
+    TYPE_CHOICES = [('train', 'Залізничні'),
+                    ('bus', 'Автобусні')]
+
+    departure_name = forms.CharField(max_length=50, required=False)
+    departure_id = forms.IntegerField(initial=2210700)
+    arrival_name = forms.CharField(max_length=50, required=False)
+    arrival_id = forms.IntegerField(initial=2200001)
+    date = forms.DateField(widget=forms.SelectDateWidget(), initial=datetime.date.today)
+    type = forms.ChoiceField(choices=TYPE_CHOICES, initial='train', widget=forms.RadioSelect)
+
+    def to_json(self):
+        return json.dumps({
+            'arrival_id': self.data['arrival_id'],
+            'departure_id': self.data['departure_id'],
+            'date': '-'.join((self.data['date_year'], self.data['date_month'], self.data['date_day'])),
+            'type': 'train'
+        })
 
 
 class HousingForm(forms.Form):
