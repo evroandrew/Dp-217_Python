@@ -12,7 +12,11 @@
 {% block content %}
 
     <div class="d-flex justify-content-center">
-        <div class="border rounded p-4 col-8 col-md-6 col-lg-4 col-xl-3 m-4">
+        <h2 class="my-4">Пошук квитків</h2>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="border rounded p-4 col-8 col-md-6 col-lg-4 col-xl-3">
             <form action="" method="post" autocomplete="off" class="">
                 {% csrf_token %}
 
@@ -38,7 +42,7 @@
 
                 <div class="form-group mb-4">
                     <label for="departure-name">
-                        Відправлення
+                        {{ form.departure_name.label }}
                     </label>
                     <input type="text" class="form-control" id="departure-name"
                            placeholder="" name="{{ form.departure_name.html_name }}"
@@ -60,7 +64,7 @@
 
                 <div class="form-group mb-4">
                     <label for="arrival-name">
-                        Прибуття
+                        {{ form.arrival_name.label }}
                     </label>
                     <input type="text" class="form-control" id="arrival-name"
                            placeholder="" name="{{ form.arrival_name.html_name }}"
@@ -82,7 +86,7 @@
 
                 <div class="form-group mb-4">
                     <label for="departure-date">
-                        Дата
+                        {{ form.date.label }}
                     </label>
                     <div>
                         <input type="date" id="departure-date" class="w-100 form-control"
@@ -94,7 +98,10 @@
                     </div>
                 </div>
 
-                <input type="submit" value="Знайти">
+                <div class="d-flex justify-content-center">
+                    <button type="submit" class="btn btn-primary mt-4 w-100">Знайти</button>
+                </div>
+
             </form>
         </div>
     </div>
