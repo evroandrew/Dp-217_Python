@@ -1,15 +1,18 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login
+from django.contrib.auth.decorators import login_required
 from django.contrib import messages
-from django.http import HttpResponse
+from django.http import HttpResponse, HttpResponseRedirect
 from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from questioning.services import get_decoded_user_results, make_top_n_results
+from universearch.services import get_universities
 
 
 def profile_view(request, update_form=None):
     user = CustomUser.objects.get(id=request.user.id)
     results = get_decoded_user_results(user)
+    favourite_univers = get_universities(user.favourites)
     make_top_n_results(results)
     if not update_form:
         update_form = CustomUserChangeForm(instance=request.user)
@@ -19,7 +22,8 @@ def profile_view(request, update_form=None):
         context={
             'user': user,
             'results': results,
-            'update_form': update_form
+            'update_form': update_form,
+            'favourite_univers': favourite_univers
         }
     )
 
@@ -46,3 +50,15 @@ def update_view(request):
         return profile_view(request, update_form=form)
     else:
         return HttpResponse(405)
+
+
+@login_required
+def favourites(request, id):
+    user = CustomUser.objects.get(id=request.user.id)
+    if id in user.favourites:
+        user.favourites.remove(id)
+    else:
+        user.favourites.append(id)
+        messages.success(request, 'Унiверситет збережено')
+    user.save()
+    return HttpResponseRedirect(request.META['HTTP_REFERER'])
