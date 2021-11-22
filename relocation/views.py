@@ -24,15 +24,20 @@ def get_housings_json(request):
 
 def tickets_view(request):
     tickets = {}
+    ui_messages = []
     if request.method == 'POST':
         form = TicketsSearchForm(request.POST)
         if form.is_valid():
             url = settings.TICKETS_SEARCH_URL
-            tickets[form.data['type']] = requests.request("POST", url, data=form.to_json()).json()
+            loaded_tickets = requests.request("POST", url, data=form.to_json()).json()
+            if loaded_tickets['trips']:
+                tickets[form.data['type']] = loaded_tickets
+            else:
+                ui_messages.append("Квитки не знайдені")
     else:
         form = TicketsSearchForm()
 
-    return render(request, 'relocation/tickets.html', {'tickets': tickets, 'form': form})
+    return render(request, 'relocation/tickets.html', {'tickets': tickets, 'form': form, 'ui_messages': ui_messages})
 
 
 def get_stations(request):
