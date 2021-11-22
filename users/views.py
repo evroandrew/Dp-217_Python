@@ -7,6 +7,7 @@ from .forms import CustomUserCreationForm, CustomUserChangeForm
 from .models import CustomUser
 from questioning.services import get_decoded_user_results, make_top_n_results
 from universearch.services import get_universities
+from enrollment_assistant.services import produce_message
 
 
 def profile_view(request, update_form=None):
@@ -57,8 +58,16 @@ def favourites(request, id):
     user = CustomUser.objects.get(id=request.user.id)
     if id in user.favourites:
         user.favourites.remove(id)
+        produce_message(topic='send_email',
+                        partition={'user_email': user.email,
+                                   'subject': 'Enrollment assistant - Favourites',
+                                   'message': f'Унiверситет {id} видалено зi списку збережених унiверситетiв'})
     else:
         user.favourites.append(id)
+        produce_message(topic='send_email',
+                        partition={'user_email': user.email,
+                                   'subject': 'Enrollment assistant - Favourites',
+                                   'message': f'Унiверситет {id} додано до списку збережених унiверситетiв'})
         messages.success(request, 'Унiверситет збережено')
     user.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
