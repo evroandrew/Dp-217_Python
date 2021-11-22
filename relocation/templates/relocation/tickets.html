@@ -3,68 +3,116 @@
 {% load static %}
 
 {% block scripts %}
+    <link rel="stylesheet" href="{% static 'relocation/css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'relocation/css/relocation.css' %}">
+    <script src="{% static 'relocation/js/jquery-ui.min.js' %}" defer></script>
     <script src="{% static 'relocation/js/tickets.js' %}" defer></script>
 {% endblock %}
 
 {% block content %}
 
-{#    <div class="container-fluid">#}
-{#        <form method="post">{% csrf_token %}#}
-{#            <div class="form-group d-flex my-4">#}
-{#                <div class="col-4 col-lg-2 p-2">#}
-{#                    <label class="h4 d-block" for="point1-input">Звідки</label>#}
-{#                    <input type="text" id="point1-input" class="w-100">#}
-{#                </div>#}
-{#                <div class="d-flex align-items-end">#}
-{#                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor"#}
-{#                         class="bi bi-arrow-left-right mb-3" viewBox="0 0 16 16">#}
-{#                        <path fill-rule="evenodd"#}
-{#                              d="M1 11.5a.5.5 0 0 0 .5.5h11.793l-3.147 3.146a.5.5 0 0 0 .708.708l4-4a.5.5 0 0 0 0-.708l-4-4a.5.5 0 0 0-.708.708L13.293 11H1.5a.5.5 0 0 0-.5.5zm14-7a.5.5 0 0 1-.5.5H2.707l3.147 3.146a.5.5 0 1 1-.708.708l-4-4a.5.5 0 0 1 0-.708l4-4a.5.5 0 1 1 .708.708L2.707 4H14.5a.5.5 0 0 1 .5.5z"/>#}
-{#                    </svg>#}
-{#                </div>#}
-{#                <div class="col-4 col-lg-2 p-2">#}
-{#                    <label class="h4 d-block" for="point2-input">Куди</label>#}
-{#                    <input type="text" id="point2-input" class="w-100">#}
-{#                </div>#}
-{#            </div>#}
+    <div class="d-flex justify-content-center">
+        <div class="border rounded p-4 col-md-6 col-xl-4 m-4">
+            <form action="" method="post" autocomplete="off" class="">
+                {% csrf_token %}
 {##}
-{#            <div class="form-group">#}
-{#                <label class="h4 d-block" for="dateInput">Дата відправлення</label>#}
-{#                <input type="date" id="dateInput">#}
-{#            </div>#}
+{#                <div class="mb-4">#}
+{#                    <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>#}
+{#                    <label class="btn btn-outline-success" for="success-outlined">Checked success radio</label>#}
 {##}
-{#            <div class="form-group">#}
-{#                <div class="mt-4 h4">Тип</div>#}
-{#                <div class="form-check">#}
-{#                    <input class="form-check-input" type="checkbox" value="" id="trainCheck">#}
-{#                    <label class="form-check-label" for="trainCheck">#}
-{#                        Залізничні#}
-{#                    </label>#}
+{#                    <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">#}
+{#                    <label class="btn btn-outline-danger" for="danger-outlined">Danger radio</label>#}
 {#                </div>#}
-{#                <div class="form-check">#}
-{#                    <input class="form-check-input" type="checkbox" value="" id="busCheck">#}
-{#                    <label class="form-check-label" for="busCheck">#}
-{#                        Автобусні#}
-{#                    </label>#}
-{#                </div>#}
-{#            </div>#}
-{#        </form>#}
-{##}
-{#        <div class="my-4">#}
-{#            <button id="search-tickets-button" class="btn btn-primary">Знайти</button>#}
-{#        </div>#}
-{#    </div>#}
 
-    <form action = "" method = "post">
-        {% csrf_token %}
-        {{form.as_p }}
-        <input type="submit" value="Знайти">
-    </form>
+{##}
+{#                <div class="mb-4">#}
+{#                    <div class="row">#}
+{##}
+{#                        {% for choice, label in form.type.field.choices %}#}
+{##}
+{#                            <div class="col">#}
+{#                                <input type="radio" class="btn-check" name="{{ form.type.html_name }}" id="{{ choice }}"#}
+{#                                autocomplete="off" {% if form.type.value == choice %} checked {% endif %}>#}
+{#                                <label class="btn btn-outline-success w-100" for="{{ choice }}">#}
+{#                                    {{ label }}#}
+{#                                </label>#}
+{#                            </div>#}
+{##}
+{#                        {% endfor %}#}
+{##}
+{#                    </div>#}
+{#                </div>#}
 
-    {#    <div id="result-output">{{ tickets }}</div>#}
+
+                <div class="form-group mb-4">
+                    <label for="departure-name">
+                        Відправлення
+                    </label>
+                    <input type="text" class="form-control" id="departure-name"
+                           placeholder="" name="{{ form.departure_name.html_name }}"
+                           {% if form.departure_name.value %}
+                               value="{{ form.departure_name.value }}"
+                           {% endif %}
+                    />
+
+                    <div class="small" id="departure-id-block">
+                            <span class="text-muted small">ID: </span>
+                            <input readonly type="text" class="station-id border-0 text-muted bg-transparent small"
+                                   id="departure-id" placeholder="" name="{{ form.departure_id.html_name }}"
+                                   {% if form.departure_id.value %}
+                                       value="{{ form.departure_id.value }}"
+                                   {% endif %}
+                            />
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="arrival-name">
+                        Прибуття
+                    </label>
+                    <input type="text" class="form-control" id="arrival-name"
+                           placeholder="" name="{{ form.arrival_name.html_name }}"
+                           {% if form.arrival_name.value %}
+                               value="{{ form.arrival_name.value }}"
+                           {% endif %}
+                    />
+
+                <div class="small" id="arrival-id-block">
+                            <span class="text-muted small">ID: </span>
+                            <input readonly type="text" class="station-id border-0 text-muted bg-transparent small"
+                                   id="arrival-id" placeholder="" name="{{ form.arrival_id.html_name }}"
+                                   {% if form.arrival_id.value %}
+                                       value="{{ form.arrival_id.value }}"
+                                   {% endif %}
+                            />
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    <label for="departure-date">
+                        Дата
+                    </label>
+                    <div>
+                        <input type="date" id="departure-date" class="w-100 form-control"
+                               name="{{ form.date.html_name }}"
+                               {% if form.date.value %}
+                                   value="{{ form.date.value }}"
+                               {% endif %}
+                        />
+                    </div>
+                </div>
+
+                <div class="form-group mb-4">
+                    {{ form.type }}
+                </div>
+
+                <input type="submit" value="Знайти">
+            </form>
+        </div>
+    </div>
+
 
     <div id="trips" class="d-flex flex-column align-items-center">
-
 
         {% if tickets.train %}
 
@@ -74,10 +122,8 @@
 
                 <div class="trip-card border rounded m-3 p-2 d-flex flex-row justify-content-between bg-light">
 
-                    {#                    <div class="m-1 border">{{ trip.id }}</div>#}
                     <div class="m-1">{{ trip.id }}</div>
 
-                    {#                    <div class="m-1 border">#}
                     <div class="m-1">
                         <div>{{ trip.legs.0.departureStation.name }}</div>
                         <div>{{ trip.legs.0.departureStation.departureDate }}</div>
@@ -85,17 +131,14 @@
                     </div>
 
                     <div>
-
                         <div>{{ trip.legs.0.duration }}</div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
                              class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
                                   d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
                         </svg>
-
                     </div>
 
-                    {#                    <div class="m-1 border">#}
                     <div class="m-1">
                         <div>{{ trip.legs.0.arrivalStation.name }}</div>
                         <div>{{ trip.legs.0.arrivalStation.arrivalDate }}</div>
@@ -103,16 +146,13 @@
                     </div>
 
                     <div>
-
                         {% for type in trip.legs.0.wagonTypes %}
                             <div class="m-2 p-1 border rounded">
                                 <div>{{ type.name }}: {{ type.minPrice }}
                                     - {{ type.maxPrice }} {{ type.currencyCode }}</div>
                             </div>
                         {% endfor %}
-
                     </div>
-
 
                 </div>
 
@@ -126,10 +166,40 @@
         <div class="col-8">
             <div class="h4 my-2">Автобусні квитки</div>
             {% for trip in tickets.bus.trips %}
-                <div class="trip-card border rounded m-2">
 
-                    <div>{{ trip.id }}</div>
+                <div class="trip-card border rounded m-3 p-2 d-flex flex-row justify-content-between bg-light">
 
+                    <div class="m-1">{{ trip.id }}</div>
+
+                    <div class="m-1">
+                        <div>{{ trip.legs.0.departureStation.name }}</div>
+                        <div>{{ trip.legs.0.departureStation.departureDate }}</div>
+                        <div>{{ trip.legs.0.departureStation.departureTime }}</div>
+                    </div>
+
+                    <div>
+                        <div>{{ trip.legs.0.duration }}</div>
+                        <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
+                             class="bi bi-arrow-right" viewBox="0 0 16 16">
+                            <path fill-rule="evenodd"
+                                  d="M1 8a.5.5 0 0 1 .5-.5h11.793l-3.147-3.146a.5.5 0 0 1 .708-.708l4 4a.5.5 0 0 1 0 .708l-4 4a.5.5 0 0 1-.708-.708L13.293 8.5H1.5A.5.5 0 0 1 1 8z"/>
+                        </svg>
+                    </div>
+
+                    <div class="m-1">
+                        <div>{{ trip.legs.0.arrivalStation.name }}</div>
+                        <div>{{ trip.legs.0.arrivalStation.arrivalDate }}</div>
+                        <div>{{ trip.legs.0.arrivalStation.arrivalTime }}</div>
+                    </div>
+
+                    <div>
+                        {% for type in trip.legs.0.wagonTypes %}
+                            <div class="m-2 p-1 border rounded">
+                                <div>{{ type.name }}: {{ type.minPrice }}
+                                    - {{ type.maxPrice }} {{ type.currencyCode }}</div>
+                            </div>
+                        {% endfor %}
+                    </div>
 
                 </div>
 

@@ -1,4 +1,3 @@
-import json
 import requests
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
@@ -24,9 +23,7 @@ def get_housings_json(request):
 
 
 def tickets_view(request):
-
     tickets = {}
-
     if request.method == 'POST':
         form = TicketsSearchForm(request.POST)
         if form.is_valid():
