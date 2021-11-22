@@ -1,5 +1,4 @@
 $(document).ready(function() {
-    // console.log($("input[name='type']:checked").val());
 
     $("input[name='type']").change(() => {
         const inputs = ['#departure-name', '#departure-id','#arrival-name', '#arrival-id'];

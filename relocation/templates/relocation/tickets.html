@@ -15,33 +15,25 @@
         <div class="border rounded p-4 col-md-6 col-xl-4 m-4">
             <form action="" method="post" autocomplete="off" class="">
                 {% csrf_token %}
-{##}
-{#                <div class="mb-4">#}
-{#                    <input type="radio" class="btn-check" name="options-outlined" id="success-outlined" autocomplete="off" checked>#}
-{#                    <label class="btn btn-outline-success" for="success-outlined">Checked success radio</label>#}
-{##}
-{#                    <input type="radio" class="btn-check" name="options-outlined" id="danger-outlined" autocomplete="off">#}
-{#                    <label class="btn btn-outline-danger" for="danger-outlined">Danger radio</label>#}
-{#                </div>#}
 
-{##}
-{#                <div class="mb-4">#}
-{#                    <div class="row">#}
-{##}
-{#                        {% for choice, label in form.type.field.choices %}#}
-{##}
-{#                            <div class="col">#}
-{#                                <input type="radio" class="btn-check" name="{{ form.type.html_name }}" id="{{ choice }}"#}
-{#                                autocomplete="off" {% if form.type.value == choice %} checked {% endif %}>#}
-{#                                <label class="btn btn-outline-success w-100" for="{{ choice }}">#}
-{#                                    {{ label }}#}
-{#                                </label>#}
-{#                            </div>#}
-{##}
-{#                        {% endfor %}#}
-{##}
-{#                    </div>#}
-{#                </div>#}
+                <div class="form-group mb-4">
+                    <div class="row">
+
+                        {% for choice, label in form.type.field.choices %}
+
+                            <div class="col">
+                                <input type="radio" class="btn-check" value="{{ choice }}"
+                                           name="{{ form.type.html_name }}" id="{{ choice }}-id"
+                                           autocomplete="off" {% if form.type.value == choice %} checked {% endif %}>
+                                <label class="btn btn-outline-success w-100" for="{{ choice }}-id">
+                                    {{ label }}
+                                </label>
+                            </div>
+
+                        {% endfor %}
+
+                    </div>
+                </div>
 
 
                 <div class="form-group mb-4">
@@ -101,10 +93,10 @@
                         />
                     </div>
                 </div>
-
-                <div class="form-group mb-4">
-                    {{ form.type }}
-                </div>
+{##}
+{#                <div class="form-group mb-4">#}
+{#                    {{ form.type }}#}
+{#                </div>#}
 
                 <input type="submit" value="Знайти">
             </form>
