@@ -1,14 +1,14 @@
-import json
 from django.template.loader import render_to_string
 from django.test import TestCase, Client
 from django.utils import timezone
 from questioning.cron import remove_obsolete_records
-from questioning.models import TestResult, KlimovCategory
+from questioning.models import TestResult, KlimovCategory, ConnectionKlimovCatStudyField, ConnectionInterestCatSpec
 from questioning.services import save_questions_results, gen_result, gen_results, get_results, get_top_categories, \
-    decode_result, get_decoded_user_results, make_top_n_results, gen_prof_categories
+    decode_result, get_decoded_user_results, make_top_n_results, gen_prof_categories, get_fields_links, \
+    get_question_type, get_button_styles, delete_result
 from users.models import CustomUser
 
-RESULTS = "[1, 2, 3, 4, 6, 1, 2, 3, 4, 6, 1, 2, 3, 4, 0, 1, 2, 3, 4, 6]"
+RESULTS = {'1': 4, '2': 4, '3': 4, '4': 4, '5': 4}
 
 
 class QuestioningTest(TestCase):
@@ -26,6 +26,51 @@ class QuestioningTest(TestCase):
         self.assertEqual(response.status_code, 200)
         with self.assertTemplateUsed('questioning_ajax.html'):
             render_to_string('questioning_ajax.html')
+
+
+class GetFieldsLinksTest(TestCase):
+    def test_get_fields_links_1(self):
+        item = 1
+        study_fields = ConnectionKlimovCatStudyField.objects.select_related('field_id').all()
+        fields = get_fields_links(study_fields, item, 1)
+        test_fields = [['Посилання на пошук:', '']]
+        self.assertEqual(test_fields, fields)
+
+    def test_get_fields_links_3(self):
+        item = 1
+        study_fields = ConnectionInterestCatSpec.objects.select_related('spec_id').all()
+        fields = get_fields_links(study_fields, item, 3)
+        test_fields = [['Посилання на пошук:', '']]
+        self.assertEqual(test_fields, fields)
+
+
+class GetQuestionTypeNameTest(TestCase):
+    def test_get_question_type_name_1(self):
+        fields = get_question_type(1)
+        test_fields = "Тест на визначення профорієнтації"
+        self.assertEqual(test_fields, fields)
+
+    def test_get_question_type_name_3(self):
+        fields = get_question_type(3)
+        test_fields = "Тест на визначення типу майбутньої професії"
+        self.assertEqual(test_fields, fields)
+
+
+class GetButtonStylesTest(TestCase):
+    def test_get_button_styles_1(self):
+        fields = get_button_styles(1)
+        test_fields = ['btn btn-primary', 'btn btn-info']
+        self.assertEqual(test_fields, fields)
+
+    def test_get_button_styles_2(self):
+        fields = get_button_styles(2)
+        test_fields = ['btn btn-primary', 'btn btn-secondary', 'btn btn-danger']
+        self.assertEqual(test_fields, fields)
+
+    def test_get_button_styles_3(self):
+        fields = get_button_styles(3)
+        test_fields = ['btn btn-primary', 'btn btn-info', 'btn btn-secondary', 'btn btn-warning', 'btn btn-danger']
+        self.assertEqual(test_fields, fields)
 
 
 class CronTestCase(TestCase):
@@ -68,8 +113,28 @@ class SaveTestCase(TestCase):
 
     def test_save1(self):
         self.assertEqual(len(TestResult.objects.all()), 0)
-        save_questions_results(user_id=self.user_id, results=RESULTS)
+        save_questions_results(user_id=self.user_id, results=RESULTS, test_type=1)
         self.assertEqual(len(TestResult.objects.all()), 1)
+
+
+class DeleteResultTestCase(TestCase):
+    def test_delete_result_1(self):
+        result_id, created_date, user_id, url = create_test_result()
+        self.assertEqual(len(TestResult.objects.all()), 1)
+        delete_result(result_id + 1, user_id)
+        self.assertEqual(len(TestResult.objects.all()), 1)
+
+    def test_delete_result_2(self):
+        result_id, created_date, user_id, url = create_test_result()
+        self.assertEqual(len(TestResult.objects.all()), 1)
+        delete_result(result_id, user_id.id - 1)
+        self.assertEqual(len(TestResult.objects.all()), 1)
+
+    def test_delete_result_3(self):
+        result_id, created_date, user_id, url = create_test_result()
+        self.assertEqual(len(TestResult.objects.all()), 1)
+        delete_result(result_id, user_id)
+        self.assertEqual(len(TestResult.objects.all()), 0)
 
 
 class GenResultTestCase(TestCase):
@@ -86,8 +151,7 @@ class GenResultTestCase(TestCase):
                                    "успішної діяльності в професіях цього типу недостатньо просто бути любителем "
                                    "відпочинку на природі, важливо ще захищати природу, прагнути позитивно взаємодіяти"
                                    " з нею.",
-                           "prof": ["Ви можете почати освоювати одну з відповідних вам професій:",
-                                    "Ландшафтний дизайнер, Фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог "
+                           "prof": ["Ландшафтний дизайнер, Фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог "
                                     "харчової промисловості."],
                            "study_fields": [['Посилання на пошук:', ''], ['09 Біологія', '09_Біологія'],
                                             ['10 Природничі науки', '10_Природничі_науки'],
@@ -103,8 +167,7 @@ class GenResultTestCase(TestCase):
                                        "металург, водії різного транспорту, пілоти, слюсарі, технологи на підприємствах"
                                        ", будівельники, автомеханіки і т.д. Для їх успішної діяльності вкрай важливі "
                                        "технічний склад розуму, уважність, схильність до дій, а не роздумів.",
-                               "prof": ["Ви можете почати освоювати одну з відповідних вам професій:",
-                                        "Автомеханік, Інженер, Електрик, Пілот."],
+                               "prof": ["Автомеханік, Інженер, Електрик, Пілот."],
                                "study_fields": [['Посилання на пошук:', ''],
                                                 ['13 Механічна інженерія', '13_Механічна_інженерія'],
                                                 ['14 Електрична інженерія', '14_Електрична_інженерія'],
@@ -122,8 +185,7 @@ class GenResultTestCase(TestCase):
                                        "професіях є не тільки бажання, але й вміння активної взаємодії з людьми і "
                                        "продуктивного спілкування. Важливою специфікою при підготовці є добрі "
                                        "знання професійної сфери і розвинені комунікативні навички.",
-                               "prof": ["Ви можете почати освоювати одну з відповідних вам професій:",
-                                        "Психолог, SMM-менеджер, Інтернет-маркетолог, Project-менеджер, Маркетинг,"
+                               "prof": ["Психолог, SMM-менеджер, Інтернет-маркетолог, Project-менеджер, Маркетинг,"
                                         " Управління."],
                                "study_fields": [['Посилання на пошук:', ''], ['01 Освіта', '01_Освіта'],
                                                 ['03 Гуманітарні науки', '03_Гуманітарні_науки'],
@@ -143,7 +205,7 @@ class GenResultTestCase(TestCase):
                                                  '28_Публічне_управління_і_адміністрування'],
                                                 ['29 Міжнародні відносини', '29_Міжнародні_відносини']], 'id': 'cat_2'}
                        ]}]}
-        answer = gen_result(eval(RESULTS))
+        answer = gen_result(RESULTS)
         self.assertEqual(answer, test_answer)
 
 
@@ -153,38 +215,63 @@ class GenResultsTestCase(TestCase):
     def test_gen_results(self):
         url = '72f126da7df6798cd22c5bb5d6aab5d7'
         result_id = 42
-        test_answer = [
-            [timezone.now().strftime("%d/%m/%Y"),
-             'природа', 'техніка', 'людина',
-             'Ландшафтний дизайнер, Фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог харчової промисловості.',
-             'Автомеханік, Інженер, Електрик, Пілот.',
-             'Психолог, SMM-менеджер, Інтернет-маркетолог, Project-менеджер, Маркетинг, Управління.',
-             [['09 Біологія', '09_Біологія'], ['10 Природничі науки', '10_Природничі_науки'],
-              ['16 Хімічна та біоінженерія', '16_Хімічна_та_біоінженерія'],
-              ['20 Аграрні науки та продовольство', '20_Аграрні_науки_та_продовольство'],
-              ['21 Ветеринарна медицина', '21_Ветеринарна_медицина'],
-              ['22 Охорона здоров’я', '22_Охорона_здоров’я']],
-             [['13 Механічна інженерія', '13_Механічна_інженерія'],
-              ['14 Електрична інженерія', '14_Електрична_інженерія'],
-              ['15 Автоматизація та приладобудування', '15_Автоматизація_та_приладобудування'],
-              ['17 Електроніка та телекомунікації', '17_Електроніка_та_телекомунікації'],
-              ['18 Виробництво та технології', '18_Виробництво_та_технології'],
-              ['27 Транспорт', '27_Транспорт']],
-             [['01 Освіта', '01_Освіта'], ['03 Гуманітарні науки', '03_Гуманітарні_науки'],
-              ['04 Богослов’я', '04_Богослов’я'],
-              ['05 Соціальні та поведінкові науки', '05_Соціальні_та_поведінкові_науки'],
-              ['06 Журналістика', '06_Журналістика'],
-              ['07 Управління та адміністрування', '07_Управління_та_адміністрування'],
-              ['08 Право', '08_Право'], ['23 Соціальна робота', '23_Соціальна_робота'],
-              ['24 Сфера обслуговування', '24_Сфера_обслуговування'],
-              ['25 Воєнні науки, національна безпека, безпека державного кордону',
-               '25_Воєнні_науки,_національна_безпека,_безпека_державного_кордону'],
-              ['26 Цивільна безпека', '26_Цивільна_безпека'],
-              ['28 Публічне управління і адміністрування', '28_Публічне_управління_і_адміністрування'],
-              ['29 Міжнародні відносини', '29_Міжнародні_відносини']],
-             result_id, url]
-        ]
-        answer = gen_results([{'results': RESULTS, 'created_date': timezone.now(), 'url': url, 'id': result_id}])
+        q_type = 1
+        test_answer = [{'date': timezone.now().strftime("%d/%m/%Y"),
+                        'categories': [{'name': 'Людина - природа',
+                                        'prof':
+                                            ['Ландшафтний дизайнер', ' Фотограф', ' Кінолог', ' Ветеринар', ' Агроном',
+                                             ' Еколог', ' Технолог харчової промисловості'],
+                                        'study_fields':
+                                            [['Посилання на пошук:', ''], ['09 Біологія', '09_Біологія'],
+                                             ['10 Природничі науки', '10_Природничі_науки'],
+                                             ['16 Хімічна та біоінженерія', '16_Хімічна_та_біоінженерія'],
+                                             ['20 Аграрні науки та продовольство', '20_Аграрні_науки_та_продовольство'],
+                                             ['21 Ветеринарна медицина', '21_Ветеринарна_медицина'],
+                                             ['22 Охорона здоров’я', '22_Охорона_здоров’я']],
+                                        'id': 'cat_1_0'},
+                                       {'name': 'Людина - техніка',
+                                        'prof': ['Автомеханік', ' Інженер',
+                                                 ' Електрик',
+                                                 ' Пілот'], 'study_fields': [
+                                           ['Посилання на пошук:', ''],
+                                           ['13 Механічна інженерія', '13_Механічна_інженерія'],
+                                           ['14 Електрична інженерія', '14_Електрична_інженерія'],
+                                           ['15 Автоматизація та приладобудування',
+                                            '15_Автоматизація_та_приладобудування'],
+                                           ['17 Електроніка та телекомунікації', '17_Електроніка_та_телекомунікації'],
+                                           ['18 Виробництво та технології', '18_Виробництво_та_технології'],
+                                           ['27 Транспорт', '27_Транспорт']],
+                                        'id': 'cat_2_0'},
+                                       {'name': 'Людина - людина',
+                                        'prof': ['Психолог', ' SMM-менеджер',
+                                                 ' Інтернет-маркетолог', ' Project-менеджер',
+                                                 ' Маркетинг', ' Управління'],
+                                        'study_fields': [['Посилання на пошук:', ''],
+                                                         ['01 Освіта', '01_Освіта'],
+                                                         ['03 Гуманітарні науки', '03_Гуманітарні_науки'],
+                                                         ['04 Богослов’я', '04_Богослов’я'],
+                                                         ['05 Соціальні та поведінкові науки',
+                                                          '05_Соціальні_та_поведінкові_науки'],
+                                                         ['06 Журналістика', '06_Журналістика'],
+                                                         ['07 Управління та адміністрування',
+                                                          '07_Управління_та_адміністрування'],
+                                                         ['08 Право', '08_Право'],
+                                                         ['23 Соціальна робота', '23_Соціальна_робота'],
+                                                         ['24 Сфера обслуговування', '24_Сфера_обслуговування'], [
+                                                             '25 Воєнні науки, національна безпека, безпека державного кордону',
+                                                             '25_Воєнні_науки,_національна_безпека,_безпека_державного_кордону'],
+                                                         ['26 Цивільна безпека',
+                                                          '26_Цивільна_безпека'], [
+                                                             '28 Публічне управління і адміністрування',
+                                                             '28_Публічне_управління_і_адміністрування'],
+                                                         ['29 Міжнародні відносини',
+                                                          '29_Міжнародні_відносини']],
+                                        'id': 'cat_3_0'}], 'id': 42,
+                        'url': '72f126da7df6798cd22c5bb5d6aab5d7', 'type': 'Тест на визначення профорієнтації',
+                        'short': 1}]
+
+        answer = gen_results(
+            [{'results': str(RESULTS), 'created_date': timezone.now(), 'url': url, 'id': result_id, 'type': q_type}])
         self.assertEqual(answer, test_answer)
 
 
@@ -192,7 +279,7 @@ class GetResultsTestCase(TestCase):
     fixtures = ['klimovcategory.json', 'studyfields.json', 'specialities.json', 'connection.json']
 
     def test_get_results1(self):
-        user_id = CustomUser.objects.create(email='admin').id
+        user_id = CustomUser.objects.create(email='admin')
         test_answer = {'title': 'Ви не пройшли опитування', }
         answer = get_results(user_id)
         self.assertEqual(answer, test_answer)
@@ -201,28 +288,23 @@ class GetResultsTestCase(TestCase):
         user_id = CustomUser.objects.create(email='admin')
         result_id = TestResult.objects.create(results=RESULTS, user_id=user_id).id
         url = TestResult.objects.get(id=result_id).url
-        items = gen_results([{'results': RESULTS, 'created_date': timezone.now(), 'url': url, 'id': result_id}])
-        context = []
-        for item in items:
-            context.append({'date': item[0], 'categories': [
-                {'name': f"Людина - {item[index]}", 'prof': item[index + 3].replace('.', '').split(','),
-                 'study_fields': item[index + 6], 'id': f"cat_{index}_{len(context)}"} for index in range(1, 4)],
-                            'id': item[-2], 'url': item[-1], })
-            test_answer = {'title': 'Ваші результати', 'data': context}
-            answer = get_results(user_id.id)
-            self.assertEqual(answer, test_answer)
+        q_type = 1
+        items = gen_results(
+            [{'results': str(RESULTS), 'created_date': timezone.now(), 'url': url, 'id': result_id, 'type': q_type}])
+        test_answer = {'title': 'Ваші результати', 'data': items}
+        answer = get_results(user_id)
+        self.assertEqual(answer, test_answer)
 
 
 class GetTopCategoriesTestCase(TestCase):
-    def test_gen_results1(self):
-        test_answer = [1, 2, 3]
-        result = eval(RESULTS)
-        answer = get_top_categories({i: result.count(i) for i in set(result)})
+    def test_get_top_categories(self):
+        test_answer = {'1': 4, '2': 4, '3': 4}
+        answer = get_top_categories(RESULTS)
         self.assertEqual(answer, test_answer)
 
 
 def get_answer(result_id, created_date, url):
-    answers_list = eval(RESULTS)
+    answers_list = RESULTS
     answer = {'categories': [], 'date': created_date, 'id': result_id, 'url': url}
     klimov_category_list = list(KlimovCategory.objects.all().values('name', 'professions', 'desc'))
     for data in klimov_category_list:
@@ -230,15 +312,16 @@ def get_answer(result_id, created_date, url):
         data['name'] = f"Людина - {data['name']}"
         data['examples'] = data.pop('professions')
         data['description'] = data.pop('desc')
-        answer['categories'].append({'info': data, 'points': answers_list.count(index), })
+        answer['categories'].append({'info': data, 'points': answers_list[str(index+1)],'max_points': 8 })
     return [answer]
 
 
-def create_test_result(results_cur=RESULTS):
-    CustomUser.objects.create(email='admin')
+def create_test_result(results_cur=RESULTS, q_type=1, email='admin'):
+    CustomUser.objects.create(email=email)
     user_id = CustomUser.objects.all().last()
     created_date = timezone.now()
-    result_id = TestResult.objects.create(results=results_cur, user_id=user_id, created_date=created_date).id
+    result_id = TestResult.objects.create(results=results_cur, user_id=user_id, created_date=created_date,
+                                          type=q_type).id
     return result_id, created_date, user_id, str(TestResult.objects.get(id=result_id))
 
 
@@ -263,10 +346,10 @@ class GetDecodedUserResultsTestCase(TestCase):
 
 
 class MakeTopNResultsTestCase(TestCase):
-    fixtures = ['klimovcategory.json', 'studyfields.json', 'specialities.json', 'connection.json']
+    fixtures = ['klimovcategory.json', 'studyfields.json', 'specialities.json', 'connection.json', 'interests.json']
 
-    def test_decode_result(self):
-        cur_results = "[2, 2, 0, 1, 3, 1, 2, 0, 1, 2, 1, 2, 0, 1, 6, 1, 2, 0, 4, 6]"
+    def test_make_top_n_results_1(self):
+        cur_results = {'1': 4, '2': 6, '3': 6, '4': 2, '5': 3}
         result_id, created_date, user_id, url = create_test_result(cur_results)
         test_answer = get_decoded_user_results(user_id)
         make_top_n_results(test_answer)
@@ -280,7 +363,7 @@ class MakeTopNResultsTestCase(TestCase):
                                        " водії різного транспорту, пілоти, слюсарі, технологи на підприємствах, "
                                        "будівельники, автомеханіки і т.д. Для їх успішної діяльності вкрай важливі "
                                        "технічний склад розуму, уважність, схильність до дій, а не роздумів."},
-                   'points': 6},
+                   'points': 6, 'max_points': 8},
                   {'info':
                        {'name': "Людина - людина",
                         'examples': "Психолог, SMM-менеджер, Інтернет-маркетолог, Project-менеджер, Маркетинг, "
@@ -291,7 +374,7 @@ class MakeTopNResultsTestCase(TestCase):
                                        "професіях є не тільки бажання, але й вміння активної взаємодії з людьми і "
                                        "продуктивного спілкування. Важливою специфікою при підготовці є добрі знання "
                                        "професійної сфери і розвинені комунікативні навички."},
-                   'points': 6},
+                   'points': 6, 'max_points': 8},
                   {'info':
                        {'name': 'Людина - природа',
                         'examples': "Ландшафтний дизайнер, Фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог"
@@ -302,7 +385,44 @@ class MakeTopNResultsTestCase(TestCase):
                                        "про кого-небудь крім себе. Такі люди зазвичай трепетно ставляться до "
                                        "представників живої природи. Для успішної діяльності в професіях цього типу "
                                        "недостатньо просто бути любителем відпочинку на природі, важливо ще захищати "
-                                       "природу, прагнути позитивно взаємодіяти з нею."}, 'points': 4}
+                                       "природу, прагнути позитивно взаємодіяти з нею."},
+                   'points': 4, 'max_points': 8}
+                  ], 'date': created_date, 'id': result_id, 'url': url}]
+        self.assertEqual(answer, test_answer)
+
+    def test_make_top_n_results_2(self):
+        cur_results = {'1': 1, '2': 2, '3': 2, '4': 3, '5': 3, '6': 2, '7': 2, '8': 2, '9': 3, '10': 2, '11': 2,
+                       '12': 3, '13': 30, '14': 20, '15': 10, '16': 3, '17': 5, '18': 2, '19': 0}
+        result_id, created_date, user_id, url = create_test_result(cur_results, 3, 'sadasdsa')
+        test_answer = get_decoded_user_results(user_id)
+        make_top_n_results(test_answer)
+        answer = [
+            {'categories':
+                 [{'info':
+                       {'name': 'Право, юриспруденція',
+                        'examples': 'адвокат, нотаріус, юрист, прокурор, колектор, слідчий, суддя, приватний детектив,'
+                                    ' експерт – криміналіст.',
+                        'description': 'У вас гарне ораторське мистецтво, ви чудово володіє навичками листа, знаєте '
+                                       'закони і вмієте вирішувати складні питання. Тоді ви зможете чудово реалізувати '
+                                       'себе в галузі юриспруденції. Для вступу необхідно здати історію, '
+                                       'суспільствознавство чи англійську мову.'},
+                   'points': 30, 'max_points': 12},
+                  {'info':
+                       {'name': "Сфера обслуговування, торгівля",
+                        'examples': "перукар, продавець, мерчендайзер, кухар, менеджер з продажу, товарознавець, "
+                                    "супервайзер, трейдер, дистриб'ютор, гід, візажист, ріелтор, стиліст, швачка.",
+                        'description': 'Відмінні знання про суспільствознавство можуть привести вас у сферу послуг та'
+                                       ' торгівлі. Тут ви зможете реалізувати свій творчий потенціал у взаємодії'
+                                       ' із людьми.'}, 'points': 20, 'max_points': 12},
+                  {'info':
+                       {'name': 'Економіка та фінанси',
+                        'examples': 'Аналітик, страховий агент, банківський службовець, бухгалтер, скарбник, контролер,'
+                                    ' податковий інспектор, фінансист.',
+                        'description': "Якщо вам у школі вам цікаві такі предмети як математика та "
+                                       "суспільствознавство, то надалі ви зможете пов'язати свою професію з "
+                                       "економічною діяльністю. Ця галузь активно розвивається і не стоїть на місці, "
+                                       "тому ви ніколи не залишитеся без роботи."},
+                   'points': 10, 'max_points': 12}
                   ], 'date': created_date, 'id': result_id, 'url': url}]
         self.assertEqual(answer, test_answer)
 
@@ -312,7 +432,7 @@ class GenProfCategoriesTestCase(TestCase):
 
     def test_gen_prof_categories(self):
         answer = {
-            0: {
+            1: {
                 'name': 'Людина - природа',
                 'examples': "Ландшафтний дизайнер, Фотограф, Кінолог, Ветеринар, Агроном, Еколог, Технолог харчової "
                             "промисловості.",
@@ -323,7 +443,7 @@ class GenProfCategoriesTestCase(TestCase):
                                "професіях цього типу недостатньо просто бути любителем відпочинку на природі, важливо "
                                "ще захищати природу, прагнути позитивно взаємодіяти з нею."
             },
-            1: {
+            2: {
                 'name': 'Людина - техніка',
                 'examples': "Автомеханік, Інженер, Електрик, Пілот.",
                 'description': "Професії даного типу спрямовані на експлуатацію різних технічних пристроїв і приладів, "
@@ -332,7 +452,7 @@ class GenProfCategoriesTestCase(TestCase):
                                "т.д. Для їх успішної діяльності вкрай важливі технічний склад розуму, уважність, "
                                "схильність до дій, а не роздумів."
             },
-            2: {
+            3: {
                 'name': 'Людина - людина',
                 'examples': "Психолог, SMM-менеджер, Інтернет-маркетолог, Project-менеджер, Маркетинг, Управління.",
                 'description': "До цього типу належать професії, основний напрямок яких пов'язано зі спілкуванням між "
@@ -341,7 +461,7 @@ class GenProfCategoriesTestCase(TestCase):
                                "активної взаємодії з людьми і продуктивного спілкування. Важливою специфікою при "
                                "підготовці є добрі знання професійної сфери і розвинені комунікативні навички."
             },
-            3: {
+            4: {
                 'name': 'Людина - знакова система',
                 'examples': "Data Science, Програміст Python, Розробник мобільних додатків, Інтернет-маркетолог.",
                 'description': "Основним напрямком діяльності даного типу професій є робота з цифрами, формулами, "
@@ -351,7 +471,7 @@ class GenProfCategoriesTestCase(TestCase):
                                " Для успішної діяльності важливо мати інтерес до різних формулам, таблицям, картам, "
                                "схемами, баз даних."
             },
-            4: {
+            5: {
                 'name': 'Людина - художній образ',
                 'examples': "Дизайнер, Кліпмейкер, Кіноактор, ТВ - Байєр.",
                 'description': "Професії даного типу підходять людям з розвиненим образним мисленням і творчою жилкою. "
@@ -360,5 +480,5 @@ class GenProfCategoriesTestCase(TestCase):
                                " моделюванням, виготовленням різних творів мистецтва."
             },
         }
-        test_answer = gen_prof_categories()
+        test_answer = gen_prof_categories(1)
         self.assertEqual(answer, test_answer)

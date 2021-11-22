@@ -1,5 +1,5 @@
-async function getQuestions() {
-    let url = '/questioning/get_questions/1';
+async function getQuestions(val) {
+    let url = '/questioning/questions/' + val;
     try {
         let res = await fetch(url);
         return await res.json();
@@ -10,25 +10,25 @@ async function getQuestions() {
 
 async function ajaxRequest(values, answer_id) {
     //let csrf = $('input[name=csrfmiddlewaretoken]')[0].value;
-    if (typeof values == "undefined") {
-        let questions = await getQuestions();
+    if ((typeof values == "undefined") || (typeof values == "number")) {
+        let questions = await getQuestions(values);
         values = JSON.parse(questions);
     } else {
-        values[0]['results'].push(answer_id);
+        values['results'][answer_id[0]] += answer_id[1];
     }
-    if (values[0]['results'].length < 20) {
-        let val = values[0]['questions'].pop();
+    if (values['questions'].length > 1) {
+        let val = values['questions'].pop();
+        for (let index = 0; index < values['buttons'].length; index++) {
+            val['answers'][index]['btn'] = values['buttons'][index]
+        }
         let SendInfo = {
             question: val['question'],
-            answer_id_1: val['answer_1'],
-            answer_id_2: val['answer_2'],
-            result_1: val['result_id_1'],
-            result_2: val['result_id_2'],
+            answers: val['answers'],
             values: values
         };
         $.ajax({
             type: "POST",
-            url: '/questioning/ajax/',
+            url: '/questioning/questions/',
             data: JSON.stringify(SendInfo),
             dataType: 'text',
             success: function (res) {
@@ -42,7 +42,7 @@ async function ajaxRequest(values, answer_id) {
         $.ajax({
             type: "POST",
             url: '/questioning/results/',
-            data: JSON.stringify(values[0]['results']),
+            data: JSON.stringify([values['type'], values['results']]),
             dataType: 'text',
             success: function (res) {
                 let start_index = res.indexOf('<div id="results">', 0);

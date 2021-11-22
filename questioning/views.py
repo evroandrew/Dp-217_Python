@@ -1,55 +1,40 @@
 import json
-from django.shortcuts import render, get_object_or_404
+from django.views.generic import View
+from django.shortcuts import render
 from django.http import HttpResponse, JsonResponse
 from django.template import loader
 from django.views.decorators.csrf import csrf_exempt
-from questioning.models import TestResult, QuestionsBase
-from .services import save_questions_results, gen_result, get_results
+from django.utils.decorators import method_decorator
+from .services import get_result, get_results, generate_result, delete_result, get_questions
+
+
+@method_decorator(csrf_exempt, name='dispatch')
+class ResultViewSet(View):
+    def get(self, request, link=''):
+        if link:
+            return render(request, 'questioning_results.html', get_result(link))
+        else:
+            return render(request, 'questioning_results.html', get_results(request.user))
+
+    def post(self, request):
+        return render(request, 'questioning_results.html', generate_result(request.read(), request.user))
+
+    def delete(self, request, id):
+        if delete_result(id, request.user):
+            return HttpResponse(status=200)
+        else:
+            return HttpResponse(status=403)
 
 
 def questioning_view(request):
     return render(request, "questioning.html")
 
 
-@csrf_exempt
-def questioning_ajax(request):
-    tmp = json.loads(request.read())
-    t = loader.get_template('questioning_ajax.html')
-    return HttpResponse(t.render(tmp, request))
+@method_decorator(csrf_exempt, name='dispatch')
+class QuestioningViewSet(View):
+    def get(self, request, questions_type):
+        return JsonResponse(get_questions(questions_type), safe=False)
 
-
-@csrf_exempt
-def questioning_results(request, link=''):
-    if request.is_ajax():
-        results = json.loads(request.read())
-        if request.user.is_authenticated:
-            save_questions_results(request.user.id, results)
-        resulted_text = gen_result(results)
-    elif link == '':
-        resulted_text = {'title': "Ви не авторизовані", }
-        if request.user.is_authenticated:
-            resulted_text = get_results(request.user.id)
-        return render(request, 'questioning_results.html', resulted_text)
-    else:
-        query = TestResult.objects.filter(url=link)
-        if query:
-            resulted_text = gen_result(eval(query.first().results))
-        else:
-            resulted_text = {'title': 'Результат опитування не знайдено', }
-    return render(request, 'questioning_results.html', resulted_text)
-
-
-@csrf_exempt
-def delete_result(request, id):
-    result = get_object_or_404(TestResult, id=id)
-
-    if request.user != result.user_id:
-        return HttpResponse(status=403)
-
-    result.delete()
-    return HttpResponse(status=200)
-
-
-def get_questions(request, questions_type):
-    qs = [{'questions': list(QuestionsBase.objects.filter(type=questions_type).values()), 'results': [], }]
-    return JsonResponse(json.dumps(qs), safe=False)
+    def post(self, request, ):
+        return HttpResponse(
+            loader.get_template('questioning_ajax.html').render(json.loads(request.read()), request))
