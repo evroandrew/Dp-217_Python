@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-
+{% load i18n i18n %}
 {% load static %}
 
 {% block scripts %}
@@ -12,7 +12,7 @@
 {% block content %}
 
     <div class="d-flex justify-content-center">
-        <h2 class="my-4">Пошук квитків</h2>
+        <h2 class="my-4">{% trans 'Пошук квитків' %}</h2>
     </div>
 
     <div class="d-flex justify-content-center">
@@ -42,7 +42,7 @@
 
                 <div class="form-group mb-4">
                     <label for="departure-name">
-                        {{ form.departure_name.label }}
+                        {{ form.departure_name.label_tag }}
                     </label>
                     <input type="text" class="form-control" id="departure-name"
                            placeholder="" name="{{ form.departure_name.html_name }}"
@@ -99,7 +99,7 @@
                 </div>
 
                 <div class="d-flex justify-content-center">
-                    <button type="submit" class="btn btn-primary mt-4 w-100">Знайти</button>
+                    <button type="submit" class="btn btn-primary mt-4 w-100">{% trans 'Знайти' %}</button>
                 </div>
 
             </form>
@@ -130,7 +130,7 @@
         {% if tickets.train %}
 
         <div class="col-8">
-            <div class="h4 my-2">Залізничні квитки</div>
+            <div class="h4 my-2">{% trans 'Залізничні квитки' %}</div>
             {% for trip in tickets.train.trips %}
 
                 <div class="trip-card border rounded m-3 p-2 d-flex flex-row justify-content-between bg-light">
@@ -177,12 +177,10 @@
         {% if tickets.bus %}
 
         <div class="col-8">
-            <div class="h4 my-2">Автобусні квитки</div>
+            <div class="h4 my-2">{% trans 'Автобусні квитки' %}</div>
             {% for trip in tickets.bus.trips %}
 
                 <div class="trip-card border rounded m-3 p-2 d-flex flex-row justify-content-between bg-light">
-
-                    <div class="m-1">{{ trip.id }}</div>
 
                     <div class="m-1">
                         <div>{{ trip.legs.0.departureStation.name }}</div>

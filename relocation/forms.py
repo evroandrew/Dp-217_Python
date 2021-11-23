@@ -1,5 +1,6 @@
 import json
 from django import forms
+from django.utils.translation import gettext_lazy as _
 from .services import (
     RegionService as Regions,
     CityService as Cities,
@@ -10,14 +11,14 @@ from .services import (
 
 class TicketsSearchForm(forms.Form):
 
-    TYPE_CHOICES = [('train', 'Залізничні'),
-                    ('bus', 'Автобусні')]
+    TYPE_CHOICES = [('train', _('Залізничні')),
+                    ('bus', _('Автобусні'))]
 
-    departure_name = forms.CharField(label='Звідки', max_length=50, required=False)
+    departure_name = forms.CharField(label=_('Звідки'), max_length=50, required=False)
     departure_id = forms.CharField(max_length=50)
-    arrival_name = forms.CharField(label='Куди', max_length=50, required=False)
+    arrival_name = forms.CharField(label=_('Куди'), max_length=50, required=False)
     arrival_id = forms.CharField(max_length=50)
-    date = forms.DateField(label='Дата', widget=forms.SelectDateWidget(), required=True)
+    date = forms.DateField(label=_('Дата'), widget=forms.SelectDateWidget(), required=True)
     type = forms.ChoiceField(choices=TYPE_CHOICES, initial='train', widget=forms.RadioSelect)
 
     def to_json(self):
