@@ -34,13 +34,13 @@ $(document).ready(function() {
                     method: "POST",
                     url: url,
                     headers: {
-                        'language': 'ru',
+                        'language': 'uk',
                         'supplier': supplier,
                         'content-type': 'application/json'
                     },
 
                     data: JSON.stringify({
-                        "language": "ru",
+                        "language": "uk",
                         "supplier": supplier,
                         "query": search_string
                     }),

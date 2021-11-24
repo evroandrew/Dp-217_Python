@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-23 16:39+0200\n"
+"POT-Creation-Date: 2021-11-24 13:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -553,19 +553,33 @@ msgstr "Область"
 msgid "ВНЗ"
 msgstr "ВУЗ"
 
-#: relocation/templates/relocation/tickets.html:15
+#: relocation/templates/relocation/tickets.html:17
 msgid "Пошук квитків"
 msgstr "Поиск билетов"
 
-#: relocation/templates/relocation/tickets.html:102
+#: relocation/templates/relocation/tickets.html:104
 msgid "Знайти"
 msgstr "Найти"
 
-#: relocation/templates/relocation/tickets.html:133
+#: relocation/templates/relocation/tickets.html:135
 msgid "Залізничні квитки"
 msgstr "Железнодорожные билеты"
 
-#: relocation/templates/relocation/tickets.html:180
+#: relocation/templates/relocation/tickets.html:142
+msgid "Номер поїзду"
+msgstr "Номер поезда"
+
+#: relocation/templates/relocation/tickets.html:156
+#: relocation/templates/relocation/tickets.html:216
+msgid "Тривалість"
+msgstr "Длительность"
+
+#: relocation/templates/relocation/tickets.html:173
+#: relocation/templates/relocation/tickets.html:233
+msgid "Типи вагонів"
+msgstr "Типы вагонов"
+
+#: relocation/templates/relocation/tickets.html:204
 msgid "Автобусні квитки"
 msgstr "Автобусные билеты"
 
@@ -709,7 +723,7 @@ msgstr "Некорректный адрес"
 
 #: users/forms.py:29 users/forms.py:60
 msgid "Ім'я користувача"
-msgstr "Имя пользователя"
+msgstr "Пользователь"
 
 #: users/forms.py:30
 msgid "До 150 символів. Букви, цифри та @ . + - _"

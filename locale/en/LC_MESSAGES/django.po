@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2021-11-23 17:07+0200\n"
+"POT-Creation-Date: 2021-11-24 13:27+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -465,10 +465,8 @@ msgid "Cтислі результати тесту"
 msgstr "Short results"
 
 #: questioning/templates/result_card.html:69
-#, fuzzy
-#| msgid "Профіль"
 msgid "Професії"
-msgstr "Profile"
+msgstr "Professions"
 
 #: questioning/templates/result_card.html:75
 msgid "Галузі знань"
@@ -482,7 +480,7 @@ msgstr "Train"
 msgid "Автобусні"
 msgstr "Bus"
 
-#: relocation/forms.py:17 relocation/forms.py:27
+#: relocation/forms.py:17
 msgid "Звідки"
 msgstr "From"
 
@@ -553,19 +551,33 @@ msgstr "State"
 msgid "ВНЗ"
 msgstr "University"
 
-#: relocation/templates/relocation/tickets.html:15
+#: relocation/templates/relocation/tickets.html:17
 msgid "Пошук квитків"
 msgstr "Tickets search"
 
-#: relocation/templates/relocation/tickets.html:102
+#: relocation/templates/relocation/tickets.html:104
 msgid "Знайти"
 msgstr "Find"
 
-#: relocation/templates/relocation/tickets.html:133
+#: relocation/templates/relocation/tickets.html:135
 msgid "Залізничні квитки"
 msgstr "Train tickets"
 
-#: relocation/templates/relocation/tickets.html:180
+#: relocation/templates/relocation/tickets.html:142
+msgid "Номер поїзду"
+msgstr "Train number"
+
+#: relocation/templates/relocation/tickets.html:156
+#: relocation/templates/relocation/tickets.html:216
+msgid "Тривалість"
+msgstr "Duration"
+
+#: relocation/templates/relocation/tickets.html:173
+#: relocation/templates/relocation/tickets.html:233
+msgid "Типи вагонів"
+msgstr "Wagon types"
+
+#: relocation/templates/relocation/tickets.html:204
 msgid "Автобусні квитки"
 msgstr "Bus tickets"
 
@@ -689,7 +701,7 @@ msgstr "Search"
 
 #: users/forms.py:8
 msgid "Паролі не співпадають"
-msgstr ""
+msgstr "Passwords doesn't match"
 
 #: users/forms.py:16
 msgid "Ім'я вже зайняте"
@@ -863,10 +875,8 @@ msgid "Приклади"
 msgstr "Examples"
 
 #: users/templates/users/update_form.html:34
-#, fuzzy
-#| msgid "Змінити пароль"
 msgid "Змінити"
-msgstr "Change password"
+msgstr "Change"
 
 #: users/templates/users/update_form.html:38
 msgid "ЗБЕРЕГТИ"

@@ -1,6 +1,8 @@
 {% extends 'base.html' %}
 {% load i18n i18n %}
 {% load static %}
+{% load string_extras %}
+{% load time_extras %}
 
 {% block scripts %}
     <link rel="stylesheet" href="{% static 'relocation/css/jquery-ui.min.css' %}">
@@ -133,18 +135,26 @@
             <div class="h4 my-2">{% trans 'Залізничні квитки' %}</div>
             {% for trip in tickets.train.trips %}
 
-                <div class="trip-card border rounded m-3 p-2 d-flex flex-row justify-content-between bg-light">
+                <div class="trip-card border rounded my-3 p-2 d-flex flex-row justify-content-between bg-light">
 
-                    <div class="m-1">{{ trip.id }}</div>
+                    <div class="m-1 text-center">
 
-                    <div class="m-1">
-                        <div>{{ trip.legs.0.departureStation.name }}</div>
-                        <div>{{ trip.legs.0.departureStation.departureDate }}</div>
-                        <div>{{ trip.legs.0.departureStation.departureTime }}</div>
+                        <div>{% trans 'Номер поїзду' %}</div>
+                        <div>
+                            {{ trip.id|left_strip:'trip-' }}
+                        </div>
+
                     </div>
 
-                    <div>
-                        <div>{{ trip.legs.0.duration }}</div>
+                    <div class="m-1 text-center">
+                        <div>{{ trip.legs.0.departureStation.name }}</div>
+                        <div>{{ trip.legs.0.departureStation.departureDate }}</div>
+                        <div>{{ trip.legs.0.departureStation.departureTime|to_hours_minutes }}</div>
+                    </div>
+
+                    <div class="m-1 text-center">
+                        <div>{% trans 'Тривалість' %}</div>
+                        <div>{{ trip.legs.0.duration|left_strip:'0' }}</div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
                              class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -152,19 +162,33 @@
                         </svg>
                     </div>
 
-                    <div class="m-1">
+                    <div class="m-1 text-center">
                         <div>{{ trip.legs.0.arrivalStation.name }}</div>
                         <div>{{ trip.legs.0.arrivalStation.arrivalDate }}</div>
-                        <div>{{ trip.legs.0.arrivalStation.arrivalTime }}</div>
+                        <div>{{ trip.legs.0.arrivalStation.arrivalTime|to_hours_minutes }}</div>
                     </div>
 
                     <div>
-                        {% for type in trip.legs.0.wagonTypes %}
-                            <div class="m-2 p-1 border rounded">
-                                <div>{{ type.name }}: {{ type.minPrice }}
-                                    - {{ type.maxPrice }} {{ type.currencyCode }}</div>
-                            </div>
-                        {% endfor %}
+                        <div class="mx-2 my-1">
+                            {% trans 'Типи вагонів' %}
+                        </div>
+
+                        <div>
+                            {% for type in trip.legs.0.wagonTypes %}
+                                <div class="m-2 p-1 border rounded">
+                                    <div>{{ type.name }}
+
+                                        {% if trip.legs.0.prices == 'AVAILABLE' %}
+
+                                         ({{ type.minPrice }} - {{ type.maxPrice }} {{ type.currencyCode }})
+
+                                        {% endif %}
+
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    
                     </div>
 
                 </div>
@@ -180,16 +204,17 @@
             <div class="h4 my-2">{% trans 'Автобусні квитки' %}</div>
             {% for trip in tickets.bus.trips %}
 
-                <div class="trip-card border rounded m-3 p-2 d-flex flex-row justify-content-between bg-light">
+                <div class="trip-card border rounded my-3 p-2 d-flex flex-row justify-content-between bg-light">
 
-                    <div class="m-1">
+                    <div class="m-1 text-center">
                         <div>{{ trip.legs.0.departureStation.name }}</div>
                         <div>{{ trip.legs.0.departureStation.departureDate }}</div>
                         <div>{{ trip.legs.0.departureStation.departureTime }}</div>
                     </div>
 
-                    <div>
-                        <div>{{ trip.legs.0.duration }}</div>
+                    <div class="m-1 text-center">
+                        <div>{% trans 'Тривалість' %}</div>
+                        <div>{{ trip.legs.0.duration|left_strip:"0" }}</div>
                         <svg xmlns="http://www.w3.org/2000/svg" width="32" height="32" fill="currentColor"
                              class="bi bi-arrow-right" viewBox="0 0 16 16">
                             <path fill-rule="evenodd"
@@ -197,21 +222,25 @@
                         </svg>
                     </div>
 
-                    <div class="m-1">
+                    <div class="m-1 text-center">
                         <div>{{ trip.legs.0.arrivalStation.name }}</div>
                         <div>{{ trip.legs.0.arrivalStation.arrivalDate }}</div>
                         <div>{{ trip.legs.0.arrivalStation.arrivalTime }}</div>
                     </div>
 
                     <div>
-                        {% for type in trip.legs.0.wagonTypes %}
-                            <div class="m-2 p-1 border rounded">
-                                <div>{{ type.name }}: {{ type.minPrice }}
-                                    - {{ type.maxPrice }} {{ type.currencyCode }}</div>
-                            </div>
-                        {% endfor %}
+                        <div class="mx-2 my-1">
+                            {% trans 'Типи вагонів' %}
+                        </div>
+                        <div>
+                            {% for type in trip.legs.0.wagonTypes %}
+                                <div class="m-2 p-1 border rounded">
+                                    <div>{{ type.name }}: {{ type.minPrice }}
+                                        - {{ type.maxPrice }} {{ type.currencyCode }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
                     </div>
-
                 </div>
 
             {% endfor %}
