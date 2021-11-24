@@ -2,7 +2,8 @@ import requests
 from django.shortcuts import render, redirect
 from django.http import JsonResponse
 from django.conf import settings
-from .forms import HousingForm, Housings, TicketsSearchForm
+from .forms import HousingForm, TicketsSearchForm
+from .services import HousingService as Housings
 
 
 def get_housings_view(request):

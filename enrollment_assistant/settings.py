@@ -177,3 +177,14 @@ EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 TICKETS_SERVICE_URL = os.environ.get('TICKETS_SERVICE_URL', 'http://127.0.0.1:5000')
 TICKETS_SEARCH_URL = TICKETS_SERVICE_URL + '/tickets'
 TICKETS_STATIONS_SEARCH_URL = TICKETS_SERVICE_URL + '/stations'
+
+# Caching
+CACHES = {
+    "default": {
+        "BACKEND": "django_redis.cache.RedisCache",
+        "LOCATION": "redis://127.0.0.1:6379/0",
+        "OPTIONS": {
+            "CLIENT_CLASS": "django_redis.client.DefaultClient",
+        }
+    }
+}
