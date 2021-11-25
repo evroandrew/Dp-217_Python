@@ -4,6 +4,7 @@ from django.http import JsonResponse
 from django.conf import settings
 from .forms import HousingForm, TicketsSearchForm
 from .services import HousingService as Housings
+from .services import get_tickets
 
 
 def get_housings_view(request):
@@ -29,9 +30,14 @@ def tickets_view(request):
     if request.method == 'POST':
         form = TicketsSearchForm(request.POST)
         if form.is_valid():
-            url = settings.TICKETS_SEARCH_URL
-            loaded_tickets = requests.request("POST", url, data=form.to_json()).json()
-            if loaded_tickets['trips']:
+
+            # url = settings.TICKETS_SEARCH_URL
+            # loaded_tickets = requests.request("POST", url, data=form.to_json()).json()
+
+            loaded_tickets = get_tickets(form.to_json())
+            print('++++++++++++++++tickets:')
+            print(loaded_tickets)
+            if loaded_tickets and loaded_tickets['trips']:
                 tickets[form.data['type']] = loaded_tickets
             else:
                 ui_messages.append("Квитки не знайдені")

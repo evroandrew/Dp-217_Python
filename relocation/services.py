@@ -1,9 +1,32 @@
 import json
-from django.db.models import Q
-from .models import Housing, University, City, Region
 import os
 import requests
+from django.conf import settings
+from django.db.models import Q
+from .models import Housing, University, City, Region
 
+
+def get_tickets(tickets_data):
+    url = settings.TICKETS_SEARCH_URL
+
+    try:
+        response = requests.request("POST", url, data=tickets_data)
+        response.raise_for_status()
+
+    except requests.exceptions.RequestException as err:
+        print(">>>>>>>>>>>>>>>>err:")
+        print(err)
+        return False
+    #
+    # print(">>>>>>>>>>>>>>>response.status_code:")
+    # print(response.status_code)
+    # print(">>>>>>>>>>>>>>>response:")
+    # print(response)
+    # print(">>>>>>>>>>>>>>>dir(response):")
+    # print(dir(response))
+    tickets = response.json()
+
+    return tickets
 
 def get_housings() -> list:
     url = os.environ.get("HOSTEL_PARSE_URL")
