@@ -23,9 +23,16 @@ class TicketsSearchForm(forms.Form):
 
     def to_json(self):
         return json.dumps({
-            'arrival_id': self.data['arrival_id'],
-            'departure_id': self.data['departure_id'],
             'date': self.data['date'],
+
+            'arrival_id': self.data['arrival_id'],
+            "garbage1": "g1",
+
+            'departure_id': self.data['departure_id'],
+            "garbage3": "g3",
+
+            "garbage2": "g2",
+
             'type': self.data['type']
         })
 

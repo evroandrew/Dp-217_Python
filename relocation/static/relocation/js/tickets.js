@@ -26,12 +26,14 @@ $(document).ready(function() {
 
             const search_string = $(event.currentTarget).val();
             const type = $("input[name='type']:checked").val();
-            const url = stationsSettings[type].url;
+            // const url = stationsSettings[type].url;
+            const url = "http://127.0.0.1:8000/relocation/stations";
             const supplier = stationsSettings[type].supplier;
 
             if (search_string.length > 0) {
                 $.ajax({
-                    method: "POST",
+                    // method: "POST",
+                    type: "POST",
                     url: url,
                     headers: {
                         'language': 'uk',
@@ -42,11 +44,12 @@ $(document).ready(function() {
                     data: JSON.stringify({
                         "language": "uk",
                         "supplier": supplier,
-                        "query": search_string
+                        "query": search_string,
+                        "type": type
                     }),
 
                     success: function (response) {
-
+                        console.log(response);
                         function identify_id(stations, station_name) {
                             let chosen_station = stations.find(station => {
                                 return station.name.toLowerCase() === station_name.toLowerCase()
