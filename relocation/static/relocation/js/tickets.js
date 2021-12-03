@@ -28,19 +28,20 @@ $(document).ready(function() {
             const type = $("input[name='type']:checked").val();
             const url = stationsSettings[type].url;
             const supplier = stationsSettings[type].supplier;
+            const language = $('html').prop('lang') || 'uk';
 
             if (search_string.length > 0) {
                 $.ajax({
                     type: "POST",
                     url: url,
                     headers: {
-                        'language': 'uk',
+                        'language': language,
                         'supplier': supplier,
                         'content-type': 'application/json'
                     },
 
                     data: JSON.stringify({
-                        "language": "uk",
+                        "language": language,
                         "supplier": supplier,
                         "query": search_string,
                         "type": type
