@@ -985,3 +985,6 @@ msgstr "Page not found"
 msgid "Перейти до головної"
 msgstr "Go to index"
 
+#: .\templates\base.html:38
+msgid "uk"
+msgstr "en"

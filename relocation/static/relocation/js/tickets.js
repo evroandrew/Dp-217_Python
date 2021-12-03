@@ -8,11 +8,11 @@ $(document).ready(function() {
 
     const stationsSettings = {
         bus:{
-            url: "https://de-prod-lb.cashalot.in.ua/rest/stations/bus",
+            url: "/relocation/stations",
             supplier: "ubus_busfor"
         },
         train:{
-            url: "https://de-prod-lb.cashalot.in.ua/rest/stations/express",
+            url: "/relocation/stations",
             supplier: "uz_train"
         },
     };
@@ -26,23 +26,22 @@ $(document).ready(function() {
 
             const search_string = $(event.currentTarget).val();
             const type = $("input[name='type']:checked").val();
-            // const url = stationsSettings[type].url;
-            const url = "http://127.0.0.1:8000/relocation/stations";
+            const url = stationsSettings[type].url;
             const supplier = stationsSettings[type].supplier;
+            const language = $('html').prop('lang') || 'uk';
 
             if (search_string.length > 0) {
                 $.ajax({
-                    // method: "POST",
                     type: "POST",
                     url: url,
                     headers: {
-                        'language': 'uk',
+                        'language': language,
                         'supplier': supplier,
                         'content-type': 'application/json'
                     },
 
                     data: JSON.stringify({
-                        "language": "uk",
+                        "language": language,
                         "supplier": supplier,
                         "query": search_string,
                         "type": type

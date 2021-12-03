@@ -992,3 +992,7 @@ msgstr "Страница не найдена"
 #: .\templates\404.html:20
 msgid "Перейти до головної"
 msgstr "Перейти на главную"
+
+#: .\templates\base.html:38
+msgid "uk"
+msgstr "ru"
