@@ -48,7 +48,6 @@ $(document).ready(function() {
                     }),
 
                     success: function (response) {
-                        console.log(response);
                         function identify_id(stations, station_name) {
                             let chosen_station = stations.find(station => {
                                 return station.name.toLowerCase() === station_name.toLowerCase()
