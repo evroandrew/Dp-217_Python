@@ -977,3 +977,6 @@ msgstr "Change"
 msgid "ЗБЕРЕГТИ"
 msgstr "SAVE"
 
+#: .\templates\base.html:38
+msgid "uk"
+msgstr "en"

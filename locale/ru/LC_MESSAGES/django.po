@@ -985,3 +985,6 @@ msgstr "Изменить"
 msgid "ЗБЕРЕГТИ"
 msgstr "Сохранить"
 
+#: .\templates\base.html:38
+msgid "uk"
+msgstr "ru"
