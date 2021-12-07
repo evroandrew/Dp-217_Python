@@ -13,10 +13,8 @@ DATABASES = {
 }
 
 
-def params_translation(params):
-    translated_params = {DATABASES[key].objects.filter(name=value).first().name_uk for key, value in params.items() if
-                         DATABASES.get(key)}
-    return translated_params
+def translate(db_table, value):
+    return db_table.objects.filter(name=value).first().name_uk
 
 
 def get_universities_api(region: str, city: str, field: str, speciality: str) -> list:
@@ -28,10 +26,14 @@ def get_universities_api(region: str, city: str, field: str, speciality: str) ->
         'field': field,
         'speciality': speciality
     }
-    if cache.get(params):
+
+    translated_params = {key: (translate(DATABASES[key], value) if value else value)
+                         for (key, value) in params.items()}
+
+    if cache.get(translated_params):
         response = cache.get(params)
     else:
-        response = requests.get(url, params=params)
+        response = requests.get(url, params=translated_params)
         cache.set(params, response)
     return response.json()
 
