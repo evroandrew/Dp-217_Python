@@ -1,8 +1,11 @@
 import json
-from django.db.models import Q
-from .models import Housing, University, City, Region
 import os
 import requests
+
+from django.db.models import Q
+
+from enrollment_assistant.services import producer
+from .models import Housing, University, City, Region
 
 
 def get_housings() -> list:
