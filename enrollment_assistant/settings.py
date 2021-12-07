@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'enrollment_assistant.middlewares.CustomMiddleware',
 ]
 
 ROOT_URLCONF = 'enrollment_assistant.urls'
@@ -92,7 +93,7 @@ DATABASES = {
     }
 }
 
-KAFKA_SERVER = os.environ.get('KAFKA_SERVER', "'localhost:9092")
+KAFKA_SERVER = os.environ.get('KAFKA_SERVER', "localhost:9092")
 
 # Password validation
 # https://docs.djangoproject.com/en/3.2/ref/settings/#auth-password-validators

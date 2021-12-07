@@ -1,7 +1,11 @@
 import requests
+import json
+
 from django.shortcuts import render, redirect
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.conf import settings
+from django.views.decorators.csrf import csrf_exempt
+
 from .forms import HousingForm, TicketsSearchForm
 from .services import HousingService as Housings
 
@@ -42,5 +46,19 @@ def tickets_view(request):
     return render(request, 'relocation/tickets.html', {'tickets': tickets, 'form': form, 'ui_messages': ui_messages})
 
 
-def get_stations(request):
-    pass
+@csrf_exempt
+def stations_view(request):
+    if request.method == 'POST':
+        request_data = json.loads(request.body)
+
+        url = settings.TICKETS_STATIONS_SEARCH_URL
+        payload = {
+            'type': request_data['type'],
+            'search_string': request_data['query']
+        }
+
+        loaded_stations = requests.request("POST", url, data=json.dumps(payload)).json()
+        return JsonResponse(loaded_stations)
+
+    else:
+        return HttpResponse(405)
