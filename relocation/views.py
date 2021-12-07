@@ -34,7 +34,8 @@ def tickets_view(request):
         form = TicketsSearchForm(request.POST)
         if form.is_valid():
             url = settings.TICKETS_SEARCH_URL
-            loaded_tickets = requests.request("POST", url, data=form.to_json()).json()
+            loaded_tickets = requests.request(
+                "POST", url, data=form.to_json()).json()
             if loaded_tickets['trips']:
                 tickets[form.data['type']] = loaded_tickets
             else:

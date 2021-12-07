@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/3.2/ref/settings/
 """
 import sys
 import os
+import logging
 from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -189,3 +190,5 @@ CACHES = {
         }
     }
 }
+
+LOGGER = logging.getLogger()

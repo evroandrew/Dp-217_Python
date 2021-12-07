@@ -107,7 +107,8 @@ def get_description_info(question_type):
 def generate_result(results, question_type=KLIMOV_QUESTION_TYPE):
     categories = []
     categories_desc, study_fields = get_description_info(question_type)
-    top_categories = get_top_categories(results, get_average_result(question_type)).items()
+    top_categories = get_top_categories(
+        results, get_average_result(question_type)).items()
     for item, result in top_categories:
         fields = get_fields_links(study_fields, item, question_type)
         desc = categories_desc.filter(id=item).first()
@@ -116,7 +117,8 @@ def generate_result(results, question_type=KLIMOV_QUESTION_TYPE):
                            'prof': [desc.professions],
                            'study_fields': fields,
                            'id': f"cat_{len(categories)}"})
-    resulted_text = {'title': TITLE + ":", 'data': [{'categories': categories}]}
+    resulted_text = {'title': TITLE + ":",
+                     'data': [{'categories': categories}]}
     return resulted_text
 
 
@@ -131,12 +133,14 @@ def get_category_name(question_type, result, name):
         divider = HOLAND_DIVIDER
         part_desc = HOLAND_PART_DESC
         max_res = HOLAND_MAX_RESULT
-    severity = severity[result // divider] if result < max_res else severity[-1]
+    severity = severity[result //
+                        divider] if result < max_res else severity[-1]
     return f"{part_desc}{name}» - {severity} ({result} {FROM} {max_res} {MARKS})."
 
 
 def get_top_categories(resulted_categories, average_result=KLIMOVS_AVERAGE_RESULT):
-    category = {k: v for k, v in sorted(resulted_categories.items(), key=lambda item: item[1], reverse=True)}
+    category = {k: v for k, v in sorted(
+        resulted_categories.items(), key=lambda item: item[1], reverse=True)}
     category_dict = {}
     keys = [key for key in category.keys()]
 
@@ -154,7 +158,7 @@ def gen_results(answers):
     specialities = get_cached_database(HOLAND_STUDY_FIELDS_DATABASE).select_related('spec_id')
     for answer in answers:
         result, date, url, result_id, question_type = eval(answer['results']), answer['created_date'], answer['url'], \
-                                                      answer['id'], answer['type']
+            answer['id'], answer['type']
         average_result = get_average_result(question_type)
         top_categories = get_top_categories(result, average_result).items()
         categories = []
@@ -192,7 +196,8 @@ def get_result(user='', link=''):
         else:
             return {'title': TITLE_NOT_FOUND, }
     else:
-        items = list(CustomUser.objects.get(id=user.id).testresult_set.all().values())
+        items = list(CustomUser.objects.get(
+            id=user.id).testresult_set.all().values())
         if len(items) == 0:
             return {'title': TITLE_NO_RESULTS, }
         return {'title': TITLE, 'data': gen_results(items)}
@@ -254,9 +259,9 @@ def get_button_styles(questions_type):
 def send_result(user_email, questioning_type, results):
     result = generate_result(results, questioning_type)['data'][0]
     message = loader.render_to_string('result_card.html', {'result': result})
-    partition = {'user_email': user_email,
+    partition = {'items': [{'mail': user_email,
                  'subject': get_question_type(questioning_type),
-                 'message': message}
+                            'text': message}]}
     produce_message(TOPIC_SEND_MAIL, partition)
 
 
