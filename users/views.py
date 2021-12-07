@@ -85,7 +85,7 @@ def add_favourite(request, id):
 @login_required
 def remove_favourite(request, id):
     user = CustomUser.objects.get(id=request.user.id)
-    user.favourites.append(id)
+    user.favourites.remove(id)
     messages.success(request, 'Унiверситет видалено')
     user.save()
     return HttpResponseRedirect(request.META['HTTP_REFERER'])
