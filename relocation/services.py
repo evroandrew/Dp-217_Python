@@ -4,7 +4,6 @@ import requests
 
 from django.db.models import Q
 
-from enrollment_assistant.services import producer
 from .models import Housing, University, City, Region
 
 
