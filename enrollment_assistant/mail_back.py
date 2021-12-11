@@ -1,9 +1,11 @@
 """
-Email backend that writes messages to console instead of sending them.
+Email backend that writes messages to users for changing their passwords.
 """
 import json
 import requests
+
 from django.core.mail.backends.base import BaseEmailBackend
+from django.conf import settings
 
 
 class EmailBackend(BaseEmailBackend):
@@ -11,28 +13,16 @@ class EmailBackend(BaseEmailBackend):
         super().__init__(*args, **kwargs)
 
     def send_messages(self, email_messages):
-        """Write all messages to the stream in a thread-safe way."""
+        response = []
         if not email_messages:
             return
-        try:
-            for message in email_messages:
-                # print(f'message: {message}')
-                mail_box = message.message()
-                # for k,v in mail_box.items():
-                #     print(k,'>',v)
-                print(f"dir: {dir(mail_box)}")
-                # print(mail_box._payload)
-                print(mail_box.__getattribute__('_payload'))
-                print(f'============================')
-                print(mail_box)
-                print('+++++++++++++++++++++++++++++')
-                print(f"type: {type(mail_box)}, mail_box: {mail_box}")
-                url = "http://127.0.0.1:5000//mailing"
-                data = {'mail': mail_box["to"], 'subject': 'Changing password',
-                        'text': mail_box['Message-ID']}
+        for message in email_messages:
+            for recipient in message.to:
+                user_mail = recipient
+                subject = str(message.subject)
+                text = str(message.body)
+                url = settings.MAILING_SEND_URL
+                data = {'mail': user_mail, 'subject': subject, 'text': text}
                 data_json = json.dumps(data)
-                response = requests.post(url, data=data_json)
-                print(response)
-        except Exception:
-            print("503: Service Unavailable")
-        return
+                response.append(requests.post(url, data=data_json))
+            return response
