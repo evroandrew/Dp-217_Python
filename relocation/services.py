@@ -8,25 +8,28 @@ from .models import Housing, University, City, Region
 
 def get_tickets(tickets_data):
     url = settings.TICKETS_SEARCH_URL
-
     try:
         response = requests.request("POST", url, data=tickets_data)
         response.raise_for_status()
-
-    except requests.exceptions.RequestException as err:
-        print(">>>>>>>>>>>>>>>>err:")
-        print(err)
+    except requests.exceptions.RequestException:
         return False
-    #
-    # print(">>>>>>>>>>>>>>>response.status_code:")
-    # print(response.status_code)
-    # print(">>>>>>>>>>>>>>>response:")
-    # print(response)
-    # print(">>>>>>>>>>>>>>>dir(response):")
-    # print(dir(response))
-    tickets = response.json()
 
+    tickets = response.json()
     return tickets
+
+
+def get_stations(stations_data):
+    url = settings.TICKETS_STATIONS_SEARCH_URL
+    data = json.dumps(stations_data)
+    try:
+        response = requests.request("POST", url, data=data)
+        response.raise_for_status()
+    except requests.exceptions.RequestException:
+        return False
+
+    tickets = response.json()
+    return tickets
+
 
 def get_housings() -> list:
     url = os.environ.get("HOSTEL_PARSE_URL")
