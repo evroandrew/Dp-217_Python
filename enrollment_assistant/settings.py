@@ -103,6 +103,7 @@ DATABASES = {
         'PORT': os.environ.get('DB_PORT', '25060'),
     }
 }
+
 if os.environ.get('DATABASE_URL') and not DEBUG:
     import dj_database_url
 
