@@ -6,6 +6,7 @@ from questioning.models import TestResult, KlimovCategory, ConnectionKlimovCatSt
     ConnectionInterestCatSpec, QuestionsBase
 from users.models import CustomUser
 from enrollment_assistant.services import produce_message
+from django.conf import settings
 
 KLIMOV_QUESTION_TYPE = 1
 ALTERNATIVE_KLIMOV_QUESTION_TYPE = 2
@@ -44,7 +45,6 @@ QUESTION_TYPES = [_("Тест на визначення профорієнтац
                   _("Тест на визначення типу майбутньої професії")]
 FROM = _('з')
 MARKS = _('балів')
-TOPIC_SEND_MAIL = 'send_mail'
 KLIMOV_DATABASE = 'KlimovCategory'
 HOLAND_DATABASE = 'InterestCategory'
 QUESTIONS_DATABASE = 'QuestionsBase'
@@ -107,7 +107,8 @@ def get_description_info(question_type):
 def generate_result(results, question_type=KLIMOV_QUESTION_TYPE):
     categories = []
     categories_desc, study_fields = get_description_info(question_type)
-    top_categories = get_top_categories(results, get_average_result(question_type)).items()
+    top_categories = get_top_categories(
+        results, get_average_result(question_type)).items()
     for item, result in top_categories:
         fields = get_fields_links(study_fields, item, question_type)
         desc = categories_desc.filter(id=item).first()
@@ -116,7 +117,8 @@ def generate_result(results, question_type=KLIMOV_QUESTION_TYPE):
                            'prof': [desc.professions],
                            'study_fields': fields,
                            'id': f"cat_{len(categories)}"})
-    resulted_text = {'title': TITLE + ":", 'data': [{'categories': categories}]}
+    resulted_text = {'title': TITLE + ":",
+                     'data': [{'categories': categories}]}
     return resulted_text
 
 
@@ -131,12 +133,14 @@ def get_category_name(question_type, result, name):
         divider = HOLAND_DIVIDER
         part_desc = HOLAND_PART_DESC
         max_res = HOLAND_MAX_RESULT
-    severity = severity[result // divider] if result < max_res else severity[-1]
+    severity = severity[result //
+                        divider] if result < max_res else severity[-1]
     return f"{part_desc}{name}» - {severity} ({result} {FROM} {max_res} {MARKS})."
 
 
 def get_top_categories(resulted_categories, average_result=KLIMOVS_AVERAGE_RESULT):
-    category = {k: v for k, v in sorted(resulted_categories.items(), key=lambda item: item[1], reverse=True)}
+    category = {k: v for k, v in sorted(
+        resulted_categories.items(), key=lambda item: item[1], reverse=True)}
     category_dict = {}
     keys = [key for key in category.keys()]
 
@@ -192,7 +196,8 @@ def get_result(user='', link=''):
         else:
             return {'title': TITLE_NOT_FOUND, }
     else:
-        items = list(CustomUser.objects.get(id=user.id).testresult_set.all().values())
+        items = list(CustomUser.objects.get(
+            id=user.id).testresult_set.all().values())
         if len(items) == 0:
             return {'title': TITLE_NO_RESULTS, }
         return {'title': TITLE, 'data': gen_results(items)}
@@ -254,10 +259,10 @@ def get_button_styles(questions_type):
 def send_result(user_email, questioning_type, results):
     result = generate_result(results, questioning_type)['data'][0]
     message = loader.render_to_string('result_card.html', {'result': result})
-    partition = {'user_email': user_email,
-                 'subject': get_question_type(questioning_type),
-                 'message': message}
-    produce_message(TOPIC_SEND_MAIL, partition)
+    partition = {'items': [{'mail': user_email,
+                            'subject': str(get_question_type(questioning_type)),
+                            'text': str(message)}]}
+    produce_message(settings.TOPIC_SEND_MAIL, partition)
 
 
 def delete_result(result_id, user):
