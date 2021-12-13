@@ -179,8 +179,12 @@ AUTHENTICATION_BACKENDS = ['users.backends.EmailUsernameBackend']
 # Redirect to home URL after login
 LOGIN_REDIRECT_URL = '/'
 
-# Redirect emails to console
-EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
+# Redirect emails for changing password
+EMAIL_BACKEND = 'enrollment_assistant.mail_back.EmailBackend'
+
+# Interaction with mailing microservice
+MAILING_SERVICE_URL = os.environ.get('MAILING_SERVICE_URL', 'http://127.0.0.1:5000')
+MAILING_SEND_URL = MAILING_SERVICE_URL + '/mailing'
 
 # Interaction with tickets microservice
 TICKETS_SERVICE_URL = os.environ.get('TICKETS_SERVICE_URL', 'http://127.0.0.1:5000')
