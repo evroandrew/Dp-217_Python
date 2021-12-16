@@ -84,7 +84,7 @@ msgstr "Человек"
 #: questioning/templates/questioning.html:15
 #: questioning/templates/questioning.html:103
 msgid "Тест на визначення профорієнтації"
-msgstr "Тест на определение профориаентации"
+msgstr "Тест на определение профориентации"
 
 #: questioning/services.py:45 questioning/templates/questioning.html:137
 msgid "Тест на визначення типу майбутньої професії"
