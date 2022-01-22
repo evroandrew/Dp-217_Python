@@ -1,0 +1,1 @@
+web: gunicorn enrollment_assistant.wsgi --log-file -

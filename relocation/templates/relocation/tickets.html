@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% load i18n i18n %}
+{% load static %}
+
+
+{% block scripts %}
+    <link rel="stylesheet" href="{% static 'relocation/css/jquery-ui.min.css' %}">
+    <link rel="stylesheet" href="{% static 'relocation/css/relocation.css' %}">
+    <script src="{% static 'relocation/js/jquery-ui.min.js' %}" defer></script>
+    <script src="{% static 'relocation/js/tickets.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+
+    <div class="d-flex justify-content-center">
+        <h2 class="my-4">{% trans 'Пошук квитків' %}</h2>
+    </div>
+
+    <div class="d-flex justify-content-center">
+        <div class="border rounded p-4 col-8 col-md-6 col-lg-4 col-xl-3">
+
+            {% include 'relocation/tickets_search_form.html' with form=form %}
+
+        </div>
+    </div>
+
+    {% if ui_messages %}
+
+        <div id="messages" class="d-flex justify-content-center my-4">
+            <div class="col-8 col-md-6 col-lg-4 col-xl-3 p-2">
+                <ul>
+
+                {% for message in ui_messages %}
+
+                    <li>{{ message }}</li>
+
+                {% endfor %}
+
+                </ul>
+            </div>
+        </div>
+
+    {% endif %}
+
+
+    <div id="trips" class="d-flex flex-column align-items-center">
+
+        {% if tickets.train %}
+
+        <div class="col-8">
+            <div class="h4 my-2">{% trans 'Залізничні квитки' %}</div>
+            {% for trip in tickets.train.trips %}
+
+                {% include 'relocation/train_ticket.html' with trip=trip %}
+
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
+        {% if tickets.bus %}
+
+        <div class="col-8">
+            <div class="h4 my-2">{% trans 'Автобусні квитки' %}</div>
+            {% for trip in tickets.bus.trips %}
+
+                {% include 'relocation/bus_ticket.html' with trip=trip %}
+
+            {% endfor %}
+        </div>
+
+        {% endif %}
+
+    </div>
+
+{% endblock %}
